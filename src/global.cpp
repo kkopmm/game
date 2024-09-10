@@ -53,7 +53,7 @@ void loadimage1()
 	for (int i = 1; i <= 8; ++i)
 	{
 		char s[20];
-		sprintf(s, "./res/man/%d.png", i, 19);
+		sprintf_s(s, "./res/man/%d.png", i, 19);
 		loadimage(&character[i - 1], s, SIZE, SIZE);
 	}
 	loadimage(&menu_face, "./res/img/menu.jpg");
@@ -362,7 +362,7 @@ void gamebk() // 游戏故事背景界面
 // 负责人：Xavier
 {
 	IMAGE GAMEBK;
-	double x, y;
+	int x, y;
 	x = 290;
 	y = 500;
 	int c = 0;

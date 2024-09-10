@@ -1,3 +1,9 @@
 /build
 /.vscode
 /res
+/out
+**/*.exe
+.vs
+/Debug
+/main.ilk
+/main*
