@@ -3,7 +3,7 @@
         {
             "name": "x64-Debug",
             "generator": "Ninja",
-            "configurationType": "Debug",
+            "configurationType": "",
             "inheritEnvironments": [ "msvc_x64" ],
             "buildRoot": "${projectDir}\\build\\${name}",
             "installRoot": "${projectDir}\\out\\install\\${name}",

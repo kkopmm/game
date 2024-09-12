@@ -5,5 +5,5 @@
 **/*.exe
 .vs
 /Debug
-/main.ilk
-/main*
+/*.ilk
+/*.pdb

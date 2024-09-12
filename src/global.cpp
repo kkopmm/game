@@ -206,7 +206,6 @@ void musicbutton(int x, int y, int w, int h, const char *text)
 }
 
 int setmusicface() // 游戏音乐设置界面
-// 负责人：ちあにぃをぁおぽ
 {
 	cleardevice(); // 清屏
 	IMAGE img;
@@ -248,7 +247,6 @@ int setmusicface() // 游戏音乐设置界面
 }
 
 int deadface() // 死亡界面
-// 负责人：名前
 {
 
 	cleardevice();
@@ -302,7 +300,7 @@ int deadface() // 死亡界面
 }
 
 void winbutton(int x, int y, int w, int h, const char *text) // 游戏胜利界面按钮
-// 负责人：云
+
 {
 	setbkmode(TRANSPARENT);					 // 去除文字的黑色背景
 	setfillcolor(BROWN);					 // 图框的颜色
@@ -317,7 +315,7 @@ void winbutton(int x, int y, int w, int h, const char *text) // 游戏胜利界�
 }
 
 int winface(void) // 游戏胜利界面
-// 负责人：云
+
 {
 	IMAGE img;
 	cleardevice();
@@ -359,7 +357,6 @@ int winface(void) // 游戏胜利界面
 }
 
 void gamebk() // 游戏故事背景界面
-// 负责人：Xavier
 {
 	IMAGE GAMEBK;
 	int x, y;
