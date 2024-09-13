@@ -6,6 +6,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include/easyx)
+include_directories(${CMAKE_SOURCE_DIR}/include/common)
+include_directories(${CMAKE_SOURCE_DIR}/include/scene)
+include_directories(${CMAKE_SOURCE_DIR}/include/utils)
+
+
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
 # 将 lib 目录加入链接器的搜索路径
 link_directories(${CMAKE_SOURCE_DIR}/lib)
