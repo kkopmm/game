@@ -2,18 +2,24 @@
 #include "resources_manager.h"
 #include "animation.h"
 
+#include "menu_scene.h"
+#include "scene_manager.h"
+
 #include <chrono>
 #include <thread>
 #include <graphics.h>
+
+ResourcesManager *res_manager = ResourcesManager::instance();
+SceneManager *scene_manager = new SceneManager();
 
 int main(int argc, char const *argv[])
 {
     using namespace std::chrono;
 
-    HWND hwnd = initgraph(1300, 760, EW_SHOWCONSOLE);
+    HWND hwnd = initgraph(1280, 720, EW_SHOWCONSOLE);
     SetWindowText(hwnd, _T("EasyX"));
-    ResourcesManager *res_manager = ResourcesManager::instance();
-    // TODO: 加载资源
+
+    // TODO: 初始化
     try
     {
         res_manager->load();
@@ -32,31 +38,37 @@ int main(int argc, char const *argv[])
     BeginBatchDraw();
 
     ExMessage msg;
+    Scene *scene = new MenuScene();
+    scene_manager->set_current_scene(scene);
     bool is_quit = false;
 
-    // 测试代码
-    Animation *anim = new Animation();
-    anim->add_frame(res_manager->get_image("player_walk_up"), 4);
-    anim->set_position({100, 100});
-
+    // 动画测试代码
+    // Animation *anim = new Animation();
+    // anim->add_frame(res_manager->get_image("player_walk_up"), 4);
+    // anim->set_position({100, 100});
+    // anim->set_interval(0.1f);
+    IMAGE *img = res_manager->get_image("player_walk_up");
     while (!is_quit)
     {
         while (peekmessage(&msg))
         {
             // TODO: 处理消息
+            scene_manager->on_input(msg);
         }
 
         steady_clock::time_point frame_start = steady_clock::now();
         duration<float> delta = duration<float>(frame_start - last_tick);
 
         // TODO: 处理更新
-        anim->on_update(delta.count());
+        // anim->on_update(delta.count());
+        scene_manager->on_update(delta.count());
         setbkcolor(RGB(0, 0, 0));
         cleardevice();
 
         // TODO: 处理绘图
-        // putimage(0, 0, ResourcesManager::instance()->get_image("background"));
-        anim->on_render();
+        scene_manager->on_draw();
+        // putimage(100, 100, img);
+        // anim->on_render();
 
         FlushBatchDraw();
 
