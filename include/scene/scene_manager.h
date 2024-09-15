@@ -5,6 +5,9 @@
 
 #include <iostream>
 
+extern Scene *setting_scene;
+extern Scene *menu_scene;
+
 enum class SceneType
 {
 	Menu,
@@ -44,12 +47,14 @@ public:
 		{
 		case SceneType::Menu:
 			std::cout << "进入Menu场景";
+			current_scene = menu_scene;
 			break;
 		case SceneType::Game:
 			std::cout << "进入Game场景";
 			break;
 		case SceneType::Setting:
 			std::cout << "进入Setting场景";
+			current_scene = setting_scene;
 			break;
 		case SceneType::Death:
 			std::cout << "进入Death场景";
