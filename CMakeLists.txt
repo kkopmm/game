@@ -3,7 +3,7 @@ project(game)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
-
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR})
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include/easyx)
