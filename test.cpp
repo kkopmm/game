@@ -3,6 +3,8 @@
 #include "animation.h"
 
 #include "menu_scene.h"
+#include "setting_scene.h"
+#include "game_scene.h"
 #include "scene_manager.h"
 
 #include <chrono>
@@ -11,6 +13,11 @@
 
 ResourcesManager *res_manager = ResourcesManager::instance();
 SceneManager *scene_manager = new SceneManager();
+Scene *menu_scene = nullptr;
+Scene *setting_scene = nullptr;
+Scene *game_scene = nullptr;
+
+bool music_on = true;
 
 int main(int argc, char const *argv[])
 {
@@ -32,22 +39,21 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
+    // 场景初始化
+    menu_scene = new MenuScene();
+    setting_scene = new SettingScene();
+    game_scene = new GameScene();
+
+    scene_manager->set_current_scene(menu_scene);
+
     const nanoseconds frame_duration(1000000000 / 120);
     steady_clock::time_point last_tick = steady_clock::now();
 
     BeginBatchDraw();
 
     ExMessage msg;
-    Scene *scene = new MenuScene();
-    scene_manager->set_current_scene(scene);
     bool is_quit = false;
 
-    // 动画测试代码
-    // Animation *anim = new Animation();
-    // anim->add_frame(res_manager->get_image("player_walk_up"), 4);
-    // anim->set_position({100, 100});
-    // anim->set_interval(0.1f);
-    IMAGE *img = res_manager->get_image("player_walk_up");
     while (!is_quit)
     {
         while (peekmessage(&msg))
@@ -60,15 +66,12 @@ int main(int argc, char const *argv[])
         duration<float> delta = duration<float>(frame_start - last_tick);
 
         // TODO: 处理更新
-        // anim->on_update(delta.count());
         scene_manager->on_update(delta.count());
         setbkcolor(RGB(0, 0, 0));
         cleardevice();
 
         // TODO: 处理绘图
         scene_manager->on_draw();
-        // putimage(100, 100, img);
-        // anim->on_render();
 
         FlushBatchDraw();
 

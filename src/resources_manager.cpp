@@ -1,6 +1,8 @@
 #include "resources_manager.h"
 #include "util.h"
 
+extern bool music_on;
+
 struct ImageInfo
 {
     std::string id;
@@ -12,21 +14,37 @@ struct AtlasInfo
     LPTSTR path;
     int num_frame = 0;
 };
+struct AudioInfo
+{
+    std::string id;
+    LPTSTR path;
+};
+
 // 图片信息列表
-static const std::vector<ImageInfo> image_info_list = {
-    // {"唯一id", _T(R"(路径)")}
-    {"background", _T(R"(res\img\剧情背景.jpeg)")},
-    {"player_walk_up", _T(R"(res\img\Character05_Walk_Up.png)")},
+static const std::vector<ImageInfo>
+    image_info_list = {
+        // {"唯一id", _T(R"(路径)")}
+        {"background", _T(R"(res\img\剧情背景.jpeg)")},
+        {"menu", _T(R"(res\img\menu.jpg)")},
+        {"player_walk_up", _T(R"(res\img\Character05_Walk_Up2.png)")},
 
 };
 static const std::vector<AtlasInfo> atlas_info_list = {
     // {"唯一id", _T(R"(路径)",帧数)}
     // {"background", _T(R"(res\background.png)"), 3},
+};
 
+static const std::vector<AudioInfo> audio_info_list = {
+    {"菜单背景音乐", _T("res/sound/菜单背景音乐.mp3")},
+    {"游戏背景音乐", _T("res/sound/游戏背景音乐.mp3")},
+    {"尖叫声", _T("res/sound/尖叫声.mp3")},
+    {"胜利音乐", _T("res/sound/胜利音乐.mp3")},
+    {"受击", _T("res/sound/受击.mp3")},
 };
 
 // 检测图片是否有效
-static inline bool check_image_valid(IMAGE *image)
+static inline bool
+check_image_valid(IMAGE *image)
 {
     return image->getwidth() > 0 && image->getheight() > 0;
 }
@@ -38,8 +56,6 @@ ResourcesManager *ResourcesManager::instance()
         manager = new ResourcesManager();
     return manager;
 }
-ResourcesManager::ResourcesManager() = default;
-ResourcesManager::~ResourcesManager() = default;
 
 void ResourcesManager::load()
 {
@@ -63,9 +79,12 @@ void ResourcesManager::load()
         }
         atlas_pool[info.id] = atlas;
     }
+    for (const auto &info : audio_info_list)
+    {
+        load_audio(info.path, info.id.c_str());
+    }
     // filp_image();
     // flip_atlas();
-    // load_audio();
 }
 
 Atlas *ResourcesManager::get_atlas(const std::string &id) const
@@ -124,3 +143,5 @@ void ResourcesManager::flip_atlas(const std::string &src_id, const std::string &
     }
     atlas_pool[dst_id] = dst_atlas;
 }
+
+
