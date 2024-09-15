@@ -35,7 +35,7 @@ struct Bullet {
 
 	int x;
 	int y;
-	char dir;
+	char dir;   //表示方向
 	int power;
 };
 struct Monster {
@@ -52,7 +52,7 @@ struct Monster {
 struct Props {
 	int x;
 	int y;
-	int sign;
+	int sign;   //标记道具的作用
 };
 
 int Menu(void);  //菜单界面
@@ -67,7 +67,7 @@ void gamebk(void); //游戏故事背景界面
 void loadimage1();   //加载图片资源
 void input();                //键盘输入????
 
-void show_photo(void); //播放恐怖照片
+void show_photo(void); //捡到宝箱后播放恐怖照片
 void is_getprops(void);      //判断是否get道具
 void initprops(int x, int y, int sign);  //初始化道具
 void initmonster(int x, int y);  //初始化怪物
@@ -75,6 +75,8 @@ void move();
 void change_show();          //???????
 bool is_wall(double x, double y);       //判断是否为墙
 
-int gameface();
+int gameface();  //游戏中界面
 void move_bullet(void);
 void print();
+
+void toValueMap();  //添加地图, 随机地图
