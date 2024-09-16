@@ -1,4 +1,6 @@
 ﻿#include "global.h"
+#include "util.h"
+
 #include <graphics.h>
 #include <cstdio>
 Player p;
@@ -49,56 +51,62 @@ char map0[22][22] = {
 	'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'};
 
 char map1[22][22] = {
-'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
-'1', '0', '1', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1',
-'1', '0', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '1', '0', '0', '1', '1', '0', '1', '0', '1',
-'1', '0', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '1', '0', '1',
-'1', '0', '1', '0', '0', '0', '1', '0', '1', '0', '0', '1', '1', '1', '0', '1', '1', '0', '0', '0', '0', '1',
-'1', '0', '1', '0', '1', '0', '1', '0', '1', '0', '0', '1', '0', '0', '0', '1', '1', '0', '1', '1', '0', '1',
-'1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '0', '1',
-'1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1', '1', '0', '0', '1',
-'1', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '0', '0', '0', '1', '0', '1', '0', '0', '0', '1', '1',
-'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '0', '0', '1', '0', '1', '1', '0', '1', '1', '1', '1',
-'1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0', '1', '1', '1', '0', '0', '0', '0', '0', '1',
-'1', '1', '1', '0', '0', '1', '1', '0', '0', '0', '1', '1', '0', '1', '1', '0', '0', '1', '1', '0', '1', '1',
-'1', '0', '0', '1', '1', '0', '1', '0', '1', '0', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1',
-'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1', '0', '0', '0', '0', '1', '0', '0', '1', '1',
-'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '0', '1', '1', '1', '0', '1', '1', '0', '0', '0', '1',
-'1', '0', '0', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1',
-'1', '0', '1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '1', '0', '0', '0', '1', '1', '0', '1', '1', '1',
-'1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '1', '0', '1', '1', '1', '1', '0', '1', '0', '1',
-'1', '0', '0', '0', '1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '0', '1', '0', '1', '1', '1', '1', '1',
-'1', '1', '1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '0', '1', '0', '1',
-'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'
-};
+	'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+	'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
+	'1', '0', '1', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1',
+	'1', '0', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '1', '0', '0', '1', '1', '0', '1', '0', '1',
+	'1', '0', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '1', '0', '1',
+	'1', '0', '1', '0', '0', '0', '1', '0', '1', '0', '0', '1', '1', '1', '0', '1', '1', '0', '0', '0', '0', '1',
+	'1', '0', '1', '0', '1', '0', '1', '0', '1', '0', '0', '1', '0', '0', '0', '1', '1', '0', '1', '1', '0', '1',
+	'1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '0', '1',
+	'1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1', '1', '0', '0', '1',
+	'1', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '0', '0', '0', '1', '0', '1', '0', '0', '0', '1', '1',
+	'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '0', '0', '1', '0', '1', '1', '0', '1', '1', '1', '1',
+	'1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0', '1', '1', '1', '0', '0', '0', '0', '0', '1',
+	'1', '1', '1', '0', '0', '1', '1', '0', '0', '0', '1', '1', '0', '1', '1', '0', '0', '1', '1', '0', '1', '1',
+	'1', '0', '0', '1', '1', '0', '1', '0', '1', '0', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1',
+	'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '1', '1', '0', '0', '0', '0', '1', '0', '0', '1', '1',
+	'1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '0', '0', '1', '1', '1', '0', '1', '1', '0', '0', '0', '1',
+	'1', '0', '0', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1',
+	'1', '0', '1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '1', '0', '0', '0', '1', '1', '0', '1', '1', '1',
+	'1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '1', '0', '1', '1', '1', '1', '0', '1', '0', '1',
+	'1', '0', '0', '0', '1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '0', '1', '0', '1', '1', '1', '1', '1',
+	'1', '1', '1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '0', '1', '0', '1',
+	'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'};
 
-//随机地图
-void toValueMap() {
+// 随机地图
+void toValueMap()
+{
 	srand((unsigned int)time(NULL));
 	int num = rand() % 2;
 
-	for (int i = 0; i < 22; ++i) {
-		for (int j = 0; j < 22; ++j) {
-			if (num == 0) {
+	for (int i = 0; i < 22; ++i)
+	{
+		for (int j = 0; j < 22; ++j)
+		{
+			if (num == 0)
+			{
 				map[i][j] = map0[i][j];
 			}
-			else {
+			else
+			{
 				map[i][j] = map1[i][j];
 			}
 		}
 	}
-	if (num == 0) {
-		initmonster(20, 10);//改
-		initmonster(3, 9);//改
+	if (num == 0)
+	{
+		initmonster(20, 10); // 改
+		initmonster(3, 9);	 // 改
 		initmonster(4, 16);
 		initmonster(14, 9);
-		initprops(16, 6, 0);//子弹
-		initprops(3, 3, 1);//血量
-		initprops(20, 14, 2);  //视野
-		initprops(18, 4, 3);  //照片x,y坐标
+		initprops(16, 6, 0);  // 子弹
+		initprops(3, 3, 1);	  // 血量
+		initprops(20, 14, 2); // 视野
+		initprops(18, 4, 3);  // 照片x,y坐标
 	}
-	else {
+	else
+	{
 		initmonster(4, 9);
 		initmonster(9, 8);
 		initmonster(15, 14);
@@ -116,27 +124,27 @@ void loadimage1()
 {
 	for (int i = 1; i <= 8; ++i)
 	{
-		char s[20];
-		sprintf_s(s, "./res/man/%d.png", i, 19);
+		TCHAR s[20];
+		_stprintf_s(s, _T("./res/man/%d.png"), i);
 		loadimage(&character[i - 1], s, SIZE, SIZE);
 	}
-	loadimage(&menu_face, "./res/img/menu.jpg");
-	loadimage(&wall, "./res/img/walk.png", SIZE, SIZE);
-	loadimage(&road, "./res/img/floor.png", SIZE, SIZE);
-	loadimage(&monster[1], "./res/img/monster1.png", SIZE, SIZE);
-	loadimage(&monster[0], "./res/img/monster2.png", SIZE, SIZE);
-	loadimage(&bullet[1], "./res/img/子弹1.png", SIZE, SIZE);
-	loadimage(&bullet[0], "./res/img/子弹2.png", SIZE, SIZE);
-	loadimage(&mask0, "./res/img/z0.png", width, height);
-	loadimage(&mask4, "./res/img/z4.png", width, height);
-	loadimage(&pbullet[1], "./res/img/弹药1.png", SIZE, SIZE);
-	loadimage(&pbullet[0], "./res/img/弹药2.png", SIZE, SIZE);
-	loadimage(&pblood[1], "./res/img/血包1.png", SIZE, SIZE);
-	loadimage(&pblood[0], "./res/img/血包2.png", SIZE, SIZE);
-	loadimage(&view[1], "./res/img/视野1.png", SIZE, SIZE);
-	loadimage(&view[0], "./res/img/视野2.png", SIZE, SIZE);
-	loadimage(&photo[1], "./res/img/惊喜1.png", SIZE, SIZE);
-	loadimage(&photo[0], "./res/img/惊喜2.png", SIZE, SIZE);
+	loadimage(&menu_face, L"./res/img/menu.jpg");
+	loadimage(&wall, L"./res/img/walk.png", SIZE, SIZE);
+	loadimage(&road, L"./res/img/floor.png", SIZE, SIZE);
+	loadimage(&monster[1], L"./res/img/monster1.png", SIZE, SIZE);
+	loadimage(&monster[0], L"./res/img/monster2.png", SIZE, SIZE);
+	loadimage(&bullet[1], L"./res/img/子弹1.png", SIZE, SIZE);
+	loadimage(&bullet[0], L"./res/img/子弹2.png", SIZE, SIZE);
+	loadimage(&mask0, L"./res/img/z0.png", width, height);
+	loadimage(&mask4, L"./res/img/z4.png", width, height);
+	loadimage(&pbullet[1], L"./res/img/弹药1.png", SIZE, SIZE);
+	loadimage(&pbullet[0], L"./res/img/弹药2.png", SIZE, SIZE);
+	loadimage(&pblood[1], L"./res/img/血包1.png", SIZE, SIZE);
+	loadimage(&pblood[0], L"./res/img/血包2.png", SIZE, SIZE);
+	loadimage(&view[1], L"./res/img/视野1.png", SIZE, SIZE);
+	loadimage(&view[0], L"./res/img/视野2.png", SIZE, SIZE);
+	loadimage(&photo[1], L"./res/img/惊喜1.png", SIZE, SIZE);
+	loadimage(&photo[0], L"./res/img/惊喜2.png", SIZE, SIZE);
 }
 
 // 函数功能:清屏, 打印菜单界面:包括开始游戏, 游戏设置, 游戏介绍, 退出游戏,并且返回点击结果
@@ -181,17 +189,17 @@ int introduce(void)
 	setbkcolor(BLACK);
 	cleardevice();
 	settextcolor(WHITE);
-	settextstyle(50, 0, "楷体");
-	outtextxy(300, 70, "W上");
-	outtextxy(300, 170, "S下");
-	outtextxy(200, 170, "A左");
-	outtextxy(400, 170, "D右");
-	outtextxy(700, 170, "【空格】发射子弹");
-	outtextxy(70, 300, "用七发子弹的枪逃离迷宫，地上的道具会帮助你！！！");
+	settextstyle(50, 0, L"楷体");
+	outtextxy(300, 70, L"W上");
+	outtextxy(300, 170, L"S下");
+	outtextxy(200, 170, L"A左");
+	outtextxy(400, 170, L"D右");
+	outtextxy(700, 170, L"【空格】发射子弹");
+	outtextxy(70, 300, L"用七发子弹的枪逃离迷宫，地上的道具会帮助你！！！");
 	settextcolor(RED);
-	outtextxy(200, 450, "【警告】不要被怪物碰到三次【警告】");
+	outtextxy(200, 450, L"【警告】不要被怪物碰到三次【警告】");
 	rectangle(600, 550, 700, 600);
-	outtextxy(600, 550, "离开");
+	outtextxy(600, 550, L"离开");
 	ExMessage m; // 定义消息变量
 	while (true)
 	{
@@ -216,51 +224,54 @@ void setmusic(int music_sign)
 	case 1:
 	{
 		menu_music = 1;
-		mciSendString("open ./res/sound/菜单背景音乐.mp3", 0, 0, 0);
-		mciSendString("play ./res/sound/菜单背景音乐.mp3 repeat", 0, 0, 0);
+		play_audio(L"菜单背景音乐");
 		break;
 	}
 
 	case 0:
 	{
 		menu_music = 0;
-		mciSendString("stop ./res/sound/菜单背景音乐.mp3", 0, 0, 0);
-		mciSendString("close ./res/sound/菜单背景音乐.mp3", 0, 0, 0);
-		mciSendString("stop  ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
-		mciSendString("close ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
-		mciSendString("stop ./res/sound/胜利音乐.mp3", 0, 0, 0);
-		mciSendString("close ./res/sound/胜利音乐.mp3", 0, 0, 0);
-		mciSendString("stop  ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
-		mciSendString("close ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
+		stop_all_audio();
+		// mciSendString(L"stop ./res/sound/菜单背景音乐.mp3", 0, 0, 0);
+		// mciSendString(L"close ./res/sound/菜单背景音乐.mp3", 0, 0, 0);
+		// mciSendString(L"stop  ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
+		// mciSendString(L"close ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
+		// mciSendString(L"stop ./res/sound/胜利音乐.mp3", 0, 0, 0);
+		// mciSendString(L"close ./res/sound/胜利音乐.mp3", 0, 0, 0);
+		// mciSendString(L"stop  ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
+		// mciSendString(L"close ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
 		break;
 	}
 	case 2:
-		mciSendString("open ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
-		mciSendString("play ./res/sound/剧情背景音乐.mp3 repeat", 0, 0, 0);
+		// mciSendString("open ./res/sound/剧情背景音乐.mp3", 0, 0, 0);
+		// mciSendString("play ./res/sound/剧情背景音乐.mp3 repeat", 0, 0, 0);
+		play_audio(L"剧情背景音乐");
 		break;
 	case 3:
 	{
-		mciSendString("open ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
-		mciSendString("play ./res/sound/游戏背景音乐.mp3 repeat", 0, 0, 0);
+		// mciSendString("open ./res/sound/游戏背景音乐.mp3", 0, 0, 0);
+		// mciSendString("play ./res/sound/游戏背景音乐.mp3 repeat", 0, 0, 0);
+		play_audio(L"游戏背景音乐");
 		break;
 	}
 	case 4:
 	{
-		mciSendString("open ./res/sound/胜利音乐.mp3", 0, 0, 0);
-		mciSendString("play ./res/sound/胜利音乐.mp3 repeat", 0, 0, 0);
+		// mciSendString("open ./res/sound/胜利音乐.mp3", 0, 0, 0);
+		// mciSendString("play ./res/sound/胜利音乐.mp3 repeat", 0, 0, 0);
+		play_audio(L"胜利音乐");
 		break;
 	}
 	}
 }
 
 // 游戏音乐设置界面按钮
-void musicbutton(int x, int y, int w, int h, const char *text)
+void musicbutton(int x, int y, int w, int h, const LPCTSTR &text)
 {
 	setbkmode(TRANSPARENT);					   // 设置窗口背景色
 	setfillcolor(BROWN);					   // 设置窗口填充色
 	fillroundrect(x, y, x + w, y + h, 10, 10); // 设置圆角矩形
 
-	settextstyle(30, 0, "黑体"); // 设置字体
+	settextstyle(30, 0, L"黑体"); // 设置字体
 
 	// 使字体在矩形中间
 	int tx = x + (w - textwidth(text)) / 2;
@@ -273,12 +284,12 @@ int setmusicface() // 游戏音乐设置界面
 {
 	cleardevice(); // 清屏
 	IMAGE img;
-	loadimage(&img, "111.jpg");
+	loadimage(&img, L"111.jpg");
 	putimage(0, -250, &img);
 
-	musicbutton(550, 300, 150, 50, "开启音乐");
-	musicbutton(550, 400, 150, 50, "关闭音乐");
-	musicbutton(550, 500, 150, 50, "返回菜单");
+	musicbutton(550, 300, 150, 50, _T("开启音乐"));
+	musicbutton(550, 400, 150, 50, _T( "关闭音乐"));
+	musicbutton(550, 500, 150, 50, _T("返回菜单"));
 
 	ExMessage msg;
 	while (1)
@@ -322,11 +333,12 @@ int deadface() // 死亡界面
 	{
 		setmusic(0); // 这里是处理游戏背景音乐，如果有音乐的话先关掉音乐先再播放尖叫声
 	}
-	mciSendString("close 尖叫", 0, 0, 0);
-	mciSendString("open ./res/sound/尖叫声.mp3 alias 尖叫", 0, 0, 0); // 把音乐地址放入
-	mciSendString("play 尖叫", 0, 0, 0);
+	// mciSendString(L"close 尖叫", 0, 0, 0);
+	// mciSendString(L"open ./res/sound/尖叫声.mp3 alias 尖叫", 0, 0, 0); // 把音乐地址放入
+	// mciSendString(L"play 尖叫", 0, 0, 0);
+	play_audio(L"尖叫声", false);
 	IMAGE img;
-	loadimage(&img, "./res/img/女鬼.png", 1300, 760); // 加入恐怖图片
+	loadimage(&img, L"./res/img/女鬼.png", 1300, 760); // 加入恐怖图片
 	putimage(0, 0, &img);
 
 	for (a; diff_t < a;)
@@ -334,9 +346,10 @@ int deadface() // 死亡界面
 		time(&end_t);
 		diff_t = difftime(end_t, start_t);
 	}
-	mciSendString("close 尖叫", 0, 0, 0);
+	// mciSendString("close 尖叫", 0, 0, 0);
+	play_audio(L"尖叫声", false);
 	cleardevice();
-	loadimage(&img, "./res/img/qaz.jpg"); // 加入失败界面
+	loadimage(&img, L"./res/img/qaz.jpg"); // 加入失败界面
 	putimage(0, 0, &img);
 	ExMessage m;
 
@@ -363,30 +376,28 @@ int deadface() // 死亡界面
 	}
 }
 
-void winbutton(int x, int y, int w, int h, const char *text) // 游戏胜利界面按钮
-
+void winbutton(int x, int y, int w, int h, const LPCTSTR &text) // 游戏胜利界面按钮
 {
 	setbkmode(TRANSPARENT);					 // 去除文字的黑色背景
 	setfillcolor(BROWN);					 // 图框的颜色
 	fillroundrect(x, y, x + w, y + h, 5, 5); // 图框的形状和大小
-	settextstyle(30, 0, "黑体");			 // 字体
-	char word1[50] = {" text"};
-	// 使文字居中
-	strcpy_s(word1, text);
+	settextstyle(30, 0, _T("黑体"));		 // 字体
+	// char word1[50] = {"text"};
+	// // 使文字居中
+	// strcpy_s(word1, text);
 	int tx1 = x + (w - textwidth(text)) / 2;
 	int ty1 = y + (h - textheight(text)) / 2;
 	outtextxy(tx1, ty1, text);
 }
 
 int winface(void) // 游戏胜利界面
-
 {
 	IMAGE img;
 	cleardevice();
-	loadimage(&img, "./res/img/通关画面.jpg", 1300, 760);
+	loadimage(&img, L"./res/img/通关画面.jpg", 1300, 760);
 	putimage(0, 0, &img);
-	winbutton(1000, 580, 200, 70, "返回菜单");
-	winbutton(150, 580, 200, 70, "重新开始");
+	winbutton(1000, 580, 200, 70, _T("返回菜单"));
+	winbutton(150, 580, 200, 70, _T("重新开始"));
 	if (flag == 1)
 	{
 		setmusic(0); // 这里是胜利音乐，如果flag是1的话则播放胜利音乐
@@ -429,8 +440,8 @@ void gamebk() // 游戏故事背景界面
 	int c = 0;
 	setbkcolor(BLACK);
 	settextcolor(WHITE);
-	settextstyle(20, 0, "宋体");
-	loadimage(&GAMEBK, "./res/img/剧情背景.jpeg", 666, 363);
+	settextstyle(20, 0, L"宋体");
+	loadimage(&GAMEBK, L"./res/img/剧情背景.jpeg", 666, 363);
 	if (flag == 1)
 	{
 		setmusic(0); // 这里是剧情背景音乐，如果flag是1则播放剧情背景音乐
@@ -445,40 +456,40 @@ void gamebk() // 游戏故事背景界面
 		}
 		BeginBatchDraw();
 		cleardevice();
-		outtextxy(x, y, "铁蛋是一个普通的社畜，一天晚上，在回家途中，看见一位老人躺在地上，铁蛋上");
-		outtextxy(x, y + 20, "去扶起老人。");
-		outtextxy(x, y + 40, "铁蛋：老人家，你没事吧，我帮你打120.");
-		outtextxy(x, y + 60, "老头：我没事。小伙子，你能送我回家吗？我家里有药。");
-		outtextxy(x, y + 80, "于是，铁蛋将老人送回了家。");
-		outtextxy(x, y + 100, "老头：药在地下室，小伙子陪我去拿药好吗？");
-		outtextxy(x, y + 120, "来到地下室，老头走进一个小房间，找着什么东西。时间一分一秒的过去，铁蛋感");
-		outtextxy(x, y + 140, "到很无聊，于是就拿起旁边的一张报纸读了起来……");
-		outtextxy(x, y + 160, "铁蛋：疯狂科学家？生化实验？难道这个地下室真的是……?");
-		outtextxy(x, y + 180, "就在铁蛋思考期间，老头已经出现在铁蛋身后，手中的铁棒将铁蛋打晕了过去。");
-		outtextxy(x, y + 200, "……");
-		outtextxy(x, y + 220, "铁蛋睁开眼睛，发现自己被捆在乐椅子上，老头正在手术台边调整工具。");
-		outtextxy(x, y + 240, "铁蛋：你在做什么？快……快放开我!");
-		outtextxy(x, y + 260, "老头：桀桀桀，给我老实点，不然我现在就把你的嘴缝上……我的外卖到了，等我");
-		outtextxy(x, y + 280, "出去拿个外卖。");
-		outtextxy(x, y + 300, "老头离开了地下室，铁蛋环顾四周，发现地上掉落了一把手术刀，于是，铁蛋模仿");
-		outtextxy(x, y + 320, "着电影中的情景，用刀割开了绳子。在货架上寻找着有用的东西，很快铁蛋找到了");
-		outtextxy(x, y + 340, "一把枪和一个手电筒，正当他准备离开时，老头回来了。");
-		outtextxy(x, y + 360, "老头：想跑？没这么容易！看我废了你！");
-		outtextxy(x, y + 380, "只见老头拿起大砍刀就向铁蛋砍来。铁蛋很快冷静下来，对着老头的腿打了一枪，");
-		outtextxy(x, y + 400, "老头倒下，铁蛋大步向出口跑去。老头爬到墙边，按下了牢房的控制按钮，顿时地");
-		outtextxy(x, y + 420, "下室的牢房被打开了，怪物们冲了出来。");
-		outtextxy(x, y + 440, "怪物：吼吼~！");
-		outtextxy(x, y + 460, "……");
+		outtextxy(x, y, L"铁蛋是一个普通的社畜，一天晚上，在回家途中，看见一位老人躺在地上，铁蛋上");
+		outtextxy(x, y + 20, L"去扶起老人。");
+		outtextxy(x, y + 40, L"铁蛋：老人家，你没事吧，我帮你打120.");
+		outtextxy(x, y + 60, L"老头：我没事。小伙子，你能送我回家吗？我家里有药。");
+		outtextxy(x, y + 80, L"于是，铁蛋将老人送回了家。");
+		outtextxy(x, y + 100, L"老头：药在地下室，小伙子陪我去拿药好吗？");
+		outtextxy(x, y + 120, L"来到地下室，老头走进一个小房间，找着什么东西。时间一分一秒的过去，铁蛋感");
+		outtextxy(x, y + 140, L"到很无聊，于是就拿起旁边的一张报纸读了起来……");
+		outtextxy(x, y + 160, L"铁蛋：疯狂科学家？生化实验？难道这个地下室真的是……?");
+		outtextxy(x, y + 180, L"就在铁蛋思考期间，老头已经出现在铁蛋身后，手中的铁棒将铁蛋打晕了过去。");
+		outtextxy(x, y + 200, L"……");
+		outtextxy(x, y + 220, L"铁蛋睁开眼睛，发现自己被捆在乐椅子上，老头正在手术台边调整工具。");
+		outtextxy(x, y + 240, L"铁蛋：你在做什么？快……快放开我!");
+		outtextxy(x, y + 260, L"老头：桀桀桀，给我老实点，不然我现在就把你的嘴缝上……我的外卖到了，等我");
+		outtextxy(x, y + 280, L"出去拿个外卖。");
+		outtextxy(x, y + 300, L"老头离开了地下室，铁蛋环顾四周，发现地上掉落了一把手术刀，于是，铁蛋模仿");
+		outtextxy(x, y + 320, L"着电影中的情景，用刀割开了绳子。在货架上寻找着有用的东西，很快铁蛋找到了");
+		outtextxy(x, y + 340, L"一把枪和一个手电筒，正当他准备离开时，老头回来了。");
+		outtextxy(x, y + 360, L"老头：想跑？没这么容易！看我废了你！");
+		outtextxy(x, y + 380, L"只见老头拿起大砍刀就向铁蛋砍来。铁蛋很快冷静下来，对着老头的腿打了一枪，");
+		outtextxy(x, y + 400, L"老头倒下，铁蛋大步向出口跑去。老头爬到墙边，按下了牢房的控制按钮，顿时地");
+		outtextxy(x, y + 420, L"下室的牢房被打开了，怪物们冲了出来。");
+		outtextxy(x, y + 440, L"怪物：吼吼~！");
+		outtextxy(x, y + 460, L"……");
 		putimage(330, y + 500, &GAMEBK); // 调用图片
 		EndBatchDraw();
-		y -= 0.8;
+		y -= 1;
 		while (t.getMilliSec() < 10)
 			;
 		t.update();
 		c++;
 		if (c == 3450)
 		{
-			outtextxy(520, 690, "――――按ESC进入游戏――――");
+			outtextxy(520, 690, L"――――按ESC进入游戏――――");
 			while (1)
 			{
 				if (GetAsyncKeyState(VK_ESCAPE))
@@ -522,9 +533,10 @@ void input() // 输入
 			{
 				if (flag == 1)
 				{
-					mciSendString("close ./res/sound/手枪.mp3", 0, 0, 0);
-					mciSendString("open ./res/sound/手枪.mp3", 0, 0, 0);
-					mciSendString("play ./res/sound/手枪.mp3", 0, 0, 0);
+					// mciSendString("close ./res/sound/手枪.mp3", 0, 0, 0);
+					// mciSendString("open ./res/sound/手枪.mp3", 0, 0, 0);
+					// mciSendString("play ./res/sound/手枪.mp3", 0, 0, 0);
+					play_audio(_T("./res/sound/手枪.mp3"));
 				}
 				struct Bullet b;
 				b.dir = p.dir;
@@ -541,9 +553,9 @@ void input() // 输入
 			{
 				if (flag == 1)
 				{
-					mciSendString("close ./res/sound/弹药耗尽.mp3", 0, 0, 0);
-					mciSendString("open ./res/sound/弹药耗尽.mp3", 0, 0, 0);
-					mciSendString("play ./res/sound/弹药耗尽.mp3", 0, 0, 0);
+					mciSendString(L"close ./res/sound/弹药耗尽.mp3", 0, 0, 0);
+					mciSendString(L"open ./res/sound/弹药耗尽.mp3", 0, 0, 0);
+					mciSendString(L"play ./res/sound/弹药耗尽.mp3", 0, 0, 0);
 				}
 			}
 		}
@@ -643,9 +655,9 @@ void move()
 			p.blood -= mons[i].power;
 			if (flag == 1)
 			{
-				mciSendString("close ./res/sound/受击.mp3", 0, 0, 0);
-				mciSendString("open ./res/sound/受击.mp3", 0, 0, 0);
-				mciSendString("play ./res/sound/受击.mp3", 0, 0, 0);
+				mciSendString(L"close ./res/sound/受击.mp3", 0, 0, 0);
+				mciSendString(L"open ./res/sound/受击.mp3", 0, 0, 0);
+				mciSendString(L"play ./res/sound/受击.mp3", 0, 0, 0);
 			}
 			t4.update();
 			p.invincible = true;
@@ -657,12 +669,12 @@ void show_photo(void)
 {
 	if (flag == 1)
 	{
-		mciSendString("close 尖叫", 0, 0, 0);
-		mciSendString("open ./res/sound/尖叫声.mp3 alias 尖叫", 0, 0, 0); // 把音乐地址放入
-		mciSendString("play 尖叫", 0, 0, 0);
+		mciSendString(L"close 尖叫", 0, 0, 0);
+		mciSendString(L"open ./res/sound/尖叫声.mp3 alias 尖叫", 0, 0, 0); // 把音乐地址放入
+		mciSendString(L"play 尖叫", 0, 0, 0);
 	}
 	IMAGE img;
-	loadimage(&img, "./res/img/道具_照片.jpg", 1300, 760); // 加入恐怖图片
+	loadimage(&img, L"./res/img/道具_照片.jpg", 1300, 760); // 加入恐怖图片
 	putimage(0, 0, &img);
 	t5.update();
 	while (t5.getMilliSec() < 2500)

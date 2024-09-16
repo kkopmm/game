@@ -58,10 +58,10 @@ struct Props {
 int Menu(void);  //菜单界面
 int introduce(void);      //游戏玩法介绍界面
 void setmusic(int music_sign);        //游戏音乐设置函数
-void musicbutton(int x, int y, int w, int h, const char* text);    //游戏音乐设置界面按钮
+void musicbutton(int x, int y, int w, int h, const LPCTSTR &text);    //游戏音乐设置界面按钮
 int setmusicface(void);         //游戏音乐设置界面
 int deadface(void);       //游戏死亡界面
-void winbutton(int x, int y, int w, int h, const char* text);//通关界面按钮
+void winbutton(int x, int y, int w, int h, const LPCTSTR &text);//通关界面按钮
 int winface(void);//通关界面
 void gamebk(void); //游戏故事背景界面
 void loadimage1();   //加载图片资源

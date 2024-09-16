@@ -1,11 +1,15 @@
-#include"global.h"
+#include "global.h"
+#include "resources_manager.h"
+
+ResourcesManager *res_manager = ResourcesManager::instance();
 
 int main()
 {
 	loadimage1();
 	srand((unsigned)time(NULL));
-	initgraph(width, height, EX_SHOWCONSOLE);
+	initgraph(width, height);
 	int a = 1;
+
 	while (1)
 	{
 		switch (a)

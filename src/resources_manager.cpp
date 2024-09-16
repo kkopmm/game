@@ -21,25 +21,26 @@ struct AudioInfo
 };
 
 // 图片信息列表
-static const std::vector<ImageInfo>
-    image_info_list = {
-        // {"唯一id", _T(R"(路径)")}
-        {"background", _T(R"(res\img\剧情背景.jpeg)")},
-        {"menu", _T(R"(res\img\menu.jpg)")},
-        {"player_walk_up", _T(R"(res\img\Character05_Walk_Up2.png)")},
-
+static const std::vector<ImageInfo> image_info_list = {
+    {"background", _T("res/img/剧情背景.jpeg")},
+    {"menu", _T("res/img/menu.png")},
+    {"menu1", _T("res/img/menu1.png")},
+    {"player_walk_up", _T(R"(res\img\Character05_Walk_Up.png)")},
 };
+
 static const std::vector<AtlasInfo> atlas_info_list = {
-    // {"唯一id", _T(R"(路径)",帧数)}
-    // {"background", _T(R"(res\background.png)"), 3},
+
 };
 
 static const std::vector<AudioInfo> audio_info_list = {
     {"菜单背景音乐", _T("res/sound/菜单背景音乐.mp3")},
     {"游戏背景音乐", _T("res/sound/游戏背景音乐.mp3")},
+    {"剧情背景音乐", _T("res/sound/剧情背景音乐.mp3")},
     {"尖叫声", _T("res/sound/尖叫声.mp3")},
     {"胜利音乐", _T("res/sound/胜利音乐.mp3")},
     {"受击", _T("res/sound/受击.mp3")},
+    {"手枪", _T("res/sound/手枪.mp3")},
+    {"弹药耗尽", _T("res/sound/弹药耗尽.mp3")},
 };
 
 // 检测图片是否有效
@@ -81,7 +82,10 @@ void ResourcesManager::load()
     }
     for (const auto &info : audio_info_list)
     {
-        load_audio(info.path, info.id.c_str());
+        int wideLength = MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, nullptr, 0);
+        std::wstring wstr(wideLength, 0);
+        MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, &wstr[0], wideLength);
+        load_audio(info.path, wstr.c_str());
     }
     // filp_image();
     // flip_atlas();
@@ -143,5 +147,3 @@ void ResourcesManager::flip_atlas(const std::string &src_id, const std::string &
     }
     atlas_pool[dst_id] = dst_atlas;
 }
-
-

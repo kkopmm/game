@@ -25,10 +25,11 @@ inline void load_audio(const LPCTSTR &path, const LPCTSTR &id)
 {
     static TCHAR str_cmd[512];
     _stprintf_s(str_cmd, _T("open %s alias %s"), path, id);
-    mciSendString(str_cmd, NULL, 0, NULL);
+    if (mciSendString(str_cmd, NULL, 0, NULL))
+        throw path;
 }
 
-inline void play_audio(const LPCTSTR &id, bool is_loop = false)
+inline void play_audio(const LPCTSTR &id, bool is_loop = true)
 {
     if (!music_on)
         return;
