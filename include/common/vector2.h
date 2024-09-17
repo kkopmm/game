@@ -31,7 +31,6 @@ public:
     }
     Vector2 operator*(float scalar) const
     {
-
         return Vector2(x * scalar, y * scalar);
     }
     void operator*=(float scalar)
@@ -41,7 +40,7 @@ public:
     }
     float length() const
     {
-        return sqrt(x * x + y * y);
+        return (float)sqrt(x * x + y * y);
     }
     Vector2 normalize() const
     {

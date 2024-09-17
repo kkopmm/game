@@ -13,10 +13,10 @@ class CollisionBox
     friend class CollisionManager;
 
 private:
+    bool enable;
     Vector2 size;
     Vector2 position;
     CollisionLayer layer;
-    bool enable;
     std::function<void()> on_collide;
     CollisionLayer layer_src = CollisionLayer::None;
     CollisionLayer layer_dst = CollisionLayer::None;
