@@ -25,7 +25,11 @@ static const std::vector<ImageInfo> image_info_list = {
     {"background", _T("res/img/剧情背景.jpeg")},
     {"menu", _T("res/img/menu.png")},
     {"menu1", _T("res/img/menu1.png")},
-    {"player_walk_up", _T(R"(res\img\Character05_Walk_Up.png)")},
+    {"player_walk_down", _T("res/img/player/walk_down.png")},
+    {"player_walk_left", _T("res/img/player/walk_left.png")},
+    {"player_walk_right", _T("res/img/player/walk_right.png")},
+    {"player_walk_up", _T("res/img/player/walk_up.png")},
+    {"walk", _T("res/img/walk.png")},
 };
 
 static const std::vector<AtlasInfo> atlas_info_list = {

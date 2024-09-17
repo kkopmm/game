@@ -12,6 +12,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include/easyx)
 include_directories(${CMAKE_SOURCE_DIR}/include/common)
 include_directories(${CMAKE_SOURCE_DIR}/include/scene)
 include_directories(${CMAKE_SOURCE_DIR}/include/utils)
+include_directories(${CMAKE_SOURCE_DIR}/include/collision)
 
 
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
