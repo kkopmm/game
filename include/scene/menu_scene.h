@@ -2,6 +2,8 @@
 #define _MENU_SCENE_H
 
 #include "scene.h"
+#include "util.h"
+#include "camera.h"
 #include "resources_manager.h"
 #include "scene_manager.h"
 
@@ -14,26 +16,32 @@ public:
     MenuScene() = default;
     ~MenuScene() = default;
 
-    void on_enter() {};
-    void on_exit() {};
-    void on_update(float delta) {};
-    void on_draw()
+    void on_enter()
     {
-        putimage(0, 0, res_manager->get_image("menu"));
+        play_audio(L"菜单背景音乐", true);
+    };
+    void on_exit() {
+    };
+    void on_update(float delta) {
+    };
+    void on_draw(const Camera &camera)
+    {
+        const Vector2 &pos_camera = camera.get_position();
+        putimage(int(0 - pos_camera.x), int(0 - pos_camera.y), res_manager->get_image("menu"));
     };
     void on_input(const ExMessage &msg)
     {
         if (msg.message != WM_LBUTTONDOWN)
             return;
-        if (msg.x > 150 && msg.x < 450)
+        if (msg.x > 130 && msg.x < 385)
         {
-            if (msg.y > 250 && msg.y < 350)
+            if (msg.y > 240 && msg.y < 330)
                 scene_manager->switch_to(SceneType::Game);
-            else if (msg.y > 360 && msg.y < 460)
+            else if (msg.y > 340 && msg.y < 430)
                 scene_manager->switch_to(SceneType::Setting);
-            else if (msg.y > 470 && msg.y < 570)
-                scene_manager->switch_to(SceneType::Setting);
-            else if (msg.y > 580 && msg.y < 690)
+            else if (msg.y > 450 && msg.y < 540)
+                scene_manager->switch_to(SceneType::Introduce);
+            else if (msg.y > 550 && msg.y < 640)
                 scene_manager->switch_to(SceneType::Exit);
         }
     };
