@@ -128,7 +128,7 @@ void loadimage1()
 		_stprintf_s(s, _T("./res/man/%d.png"), i);
 		loadimage(&character[i - 1], s, SIZE, SIZE);
 	}
-	loadimage(&menu_face, L"./res/img/menu.jpg");
+	loadimage(&menu_face, L"./res/img/menu.png");
 	loadimage(&wall, L"./res/img/walk.png", SIZE, SIZE);
 	loadimage(&road, L"./res/img/floor.png", SIZE, SIZE);
 	loadimage(&monster[1], L"./res/img/monster1.png", SIZE, SIZE);
