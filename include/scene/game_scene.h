@@ -82,11 +82,6 @@ public:
         door->on_update(delta);
         for (auto &enemy : enemy_loop)
         {
-            if (enemy->hp <= 0)
-            {
-                enemy->dead();
-                continue;
-            }
             Vector2 pos1 = player->get_position();
             Vector2 pos2 = enemy->get_position();
             enemy->set_velocity((pos1 - pos2).normalize() * 80.0f);
@@ -110,17 +105,23 @@ public:
         for (auto &wall : map)
             for (auto &w : wall)
                 w->on_draw();
+        bool surprise = false;
         for (auto &enemy : enemy_loop)
+        {
             enemy->on_draw();
+            if (enemy->surprise)
+            {
+                putimage(0, 0, res_manager->get_image("惊吓"));
+                return;
+            }
+        }
         player->on_draw();
-        sp_progress_bar.on_draw();
         door->on_draw();
 
         setbkmode(TRANSPARENT);
         settextcolor(WHITE);
         settextstyle(30, 0, _T("楷体"));
 
-        
         Rect r;
         r = {0, 0, 1300, 720};
         putimage_ex(res_manager->get_image("z0"), &r);
@@ -132,6 +133,8 @@ public:
         r = {100, 0, 64, 64};
         putimage_ex(res_manager->get_image("弹药"), &r);
         outtextxy(180, 20, std::to_wstring(player->get_bullet_count()).c_str());
+
+        sp_progress_bar.on_draw();
     };
     void on_input(const ExMessage &msg)
     {

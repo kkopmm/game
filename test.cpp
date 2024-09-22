@@ -32,7 +32,7 @@ Scene *victory_scene = nullptr;
 Camera *camera = nullptr;
 
 bool music_on = false;
-bool is_debug = true;
+bool is_debug = false;
 
 int main(int argc, char const *argv[])
 {

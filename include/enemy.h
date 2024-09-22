@@ -16,11 +16,22 @@ class Enemy : public GameObject
 {
 public:
     int hp = 2;
+    bool surprise = false;
+    bool is_dead = false;
     Enemy(const Vector2 &pos)
     {
         this->position = pos;
         animation.add_frame(res_manager->get_image("enemy"), 1);
         animation.set_position(position);
+
+        timer.set_wait_time(0.3f);
+        timer.set_one_shot(true);
+        timer.set_on_timeout(
+            [&]()
+            {
+                this->surprise = false;
+            });
+
         collision_box = collision_manager->create_collision_box();
         collision_box->set_position(position);
         collision_box->set_size({32, 32});
@@ -32,6 +43,12 @@ public:
             {
                 this->hp--;
                 other_box->set_enable(false);
+            }
+            if(other_box->get_layer_src() == CollisionLayer::Player)
+            {
+                dead();
+                surprise = true;
+                timer.restart();
             }
             if (other_box->get_layer_src() == CollisionLayer::Wall)
             {
@@ -50,7 +67,11 @@ public:
     ~Enemy() = default;
     void on_update(float delta)
     {
-        this->position += velocity * delta;
+        if (hp <= 0)
+            dead();
+        if (!is_dead)
+            this->position += velocity * delta;
+        timer.on_update(delta);
         animation.set_position(position);
         collision_box->set_position(position);
     }
@@ -61,6 +82,7 @@ public:
     }
     void dead()
     {
+        is_dead = true;
         collision_box->set_enable(false);
         set_position({-1000, -1000});
     }
@@ -70,6 +92,7 @@ public:
     }
 
 private:
+    Timer timer;
     Vector2 velocity = Vector2(0, 0);
 };
 
