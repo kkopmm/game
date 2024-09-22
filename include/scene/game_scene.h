@@ -4,16 +4,19 @@
 #include "scene.h"
 #include "util.h"
 #include "camera.h"
-#include "player.h"
 #include "animation.h"
+
+#include "progress_bar.h"
+#include "scene_manager.h"
 #include "collision_manager.h"
 #include "collision_box.h"
+
+// 实体类
+#include "player.h"
+#include "door.h"
 #include "wall.h"
 #include "floor.h"
 #include "enemy.h"
-#include "progress_bar.h"
-#include "scene_manager.h"
-#include "util.h"
 
 #include <vector>
 #include <string>
@@ -23,6 +26,8 @@ extern CollisionManager *collision_manager;
 extern SceneManager *scene_manager;
 extern Camera *camera;
 
+class Door;
+
 class GameScene : public Scene
 {
 public:
@@ -31,6 +36,9 @@ public:
     void on_enter()
     {
         camera->reset();
+        player = new Player();
+        door = new Door({64 * 0, 64*20});
+        player->set_position({100, 100});
         for (int i = 0; i < 22; i++)
         {
             std::vector<GameObject *> m;
@@ -51,17 +59,27 @@ public:
         {
             enemy_loop.push_back(new Enemy({(float)(rand() % 1280), (float)(rand() % 720)}));
         }
-        player.set_position({100, 100});
         stop_all_audio();
         play_audio(L"游戏背景音乐", true);
     };
     void on_exit()
     {
-        stop_audio(L"游戏背景音乐");
+        for (auto &wall : map)
+            for (auto &w : wall)
+                delete w;
+        for (auto &enemy : enemy_loop)
+            delete enemy;
+        map.clear();
+        enemy_loop.clear();
+        delete door;
+        delete player;
+        player = nullptr;
+        stop_all_audio();
     };
     void on_update(float delta)
     {
-        player.on_update(delta);
+        player->on_update(delta);
+        door->on_update(delta);
         for (auto &enemy : enemy_loop)
         {
             if (enemy->hp <= 0)
@@ -69,15 +87,17 @@ public:
                 enemy->dead();
                 continue;
             }
-            Vector2 pos1 = player.get_position();
+            Vector2 pos1 = player->get_position();
             Vector2 pos2 = enemy->get_position();
             enemy->set_velocity((pos1 - pos2).normalize() * 80.0f);
             enemy->on_update(delta);
         }
-        camera->set_position(player.get_position() - Vector2(640, 350));
-        sp_progress_bar.set_progress(player.get_sp() / 1000.0f);
-        if (player.get_hp() <= 0)
+        camera->set_position(player->get_position() - Vector2(640, 350));
+        sp_progress_bar.set_progress(player->get_sp() / 1000.0f);
+        if (player->get_hp() <= 0)
             scene_manager->switch_to(SceneType::Death);
+        if(door->is_vctor)
+            scene_manager->switch_to(SceneType::Victory);
     };
     void on_draw()
     {
@@ -86,33 +106,36 @@ public:
                 w->on_draw();
         for (auto &enemy : enemy_loop)
             enemy->on_draw();
-        player.on_draw();
-        setbkcolor(BLACK);
+        player->on_draw();
+        sp_progress_bar.on_draw();
+        door->on_draw();
+
+        setbkmode(TRANSPARENT);
         settextcolor(WHITE);
         settextstyle(30, 0, _T("楷体"));
+
+        // 绘制爱心图标
         Rect r = {0, 0, 64, 64};
         putimage_ex(res_manager->get_image("爱心"), &r);
-        outtextxy(70, 20, std::to_wstring(player.get_hp()).c_str());
-
-        setbkcolor(BLACK);
-        settextcolor(WHITE);
-        settextstyle(30, 0, _T("楷体"));
+        outtextxy(70, 20, std::to_wstring(player->get_hp()).c_str());
+        // 绘制弹药图标
         r = {100, 0, 64, 64};
         putimage_ex(res_manager->get_image("弹药"), &r);
-        outtextxy(180, 20, std::to_wstring(player.get_bullet_count()).c_str());
-
-        sp_progress_bar.on_draw();
+        outtextxy(180, 20, std::to_wstring(player->get_bullet_count()).c_str());
     };
     void on_input(const ExMessage &msg)
     {
-        player.on_input(msg);
+        player->on_input(msg);
     };
 
 private:
-    Player player = Player();
+    Player *player = nullptr;
     std::vector<std::vector<GameObject *>> map;
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
+    Door *door = nullptr;
+
+    
 
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',

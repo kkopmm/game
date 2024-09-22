@@ -7,12 +7,13 @@
 #include "collision_box.h"
 #include "collision_manager.h"
 #include "bullet.h"
+#include "game_object.h"
 
 #include <graphics.h>
 
 extern CollisionManager *collision_manager;
 
-class Player
+class Player : public GameObject
 {
 private:
     enum class Direction
@@ -23,8 +24,8 @@ private:
         Right
     };
 
-    bool is_walking;
-    bool is_running;
+    bool is_walking = false;
+    bool is_running = false;
     bool can_attack = true;
     bool is_invulnerable = false;
     bool can_run = true;
@@ -39,7 +40,6 @@ private:
     Timer bullet_timer;
     Timer sp_timer;
 
-    Vector2 position;
     Vector2 velocity;
     Animation walk_up;
     Animation walk_down;
@@ -47,7 +47,6 @@ private:
     Animation walk_right;
     Animation *current_animation;
     Direction direction = Direction::Down;
-    CollisionBox *collision_box = nullptr;
     Bullet *bullet;
 
 public:
@@ -56,9 +55,7 @@ public:
     void on_draw();
     void on_update(float delta);
     void on_input(const ExMessage &msg);
-    void set_position(const Vector2 &position);
     const Vector2 &get_velocity() { return velocity; };
-    const Vector2 &get_position();
     void set_hp(int hp);
     int get_hp() const;
     int get_sp() const;
@@ -66,5 +63,6 @@ public:
     void set_speed(float speed);
     void attack();
     int get_bullet_count() const;
+    void set_bullet_count(int bullet_count);
 };
 #endif // _PLAYER_H

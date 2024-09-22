@@ -21,6 +21,7 @@ public:
     {
         setbkcolor(BLACK);
         settextcolor(WHITE);
+        setlinecolor(WHITE);
         settextstyle(50, 0, _T("楷体"));
         outtextxy(300, 70, _T("W上"));
         outtextxy(300, 170, _T("S下"));

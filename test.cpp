@@ -10,6 +10,7 @@
 #include "setting_scene.h"
 #include "game_scene.h"
 #include "introduce_scene.h"
+#include "victory_scene.h"
 
 #include "collision_manager.h"
 #include "camera.h"
@@ -26,6 +27,7 @@ Scene *setting_scene = nullptr;
 Scene *game_scene = nullptr;
 Scene *introduce_scene = nullptr;
 Scene *death_scene = nullptr;
+Scene *victory_scene = nullptr;
 
 Camera *camera = nullptr;
 
@@ -58,6 +60,7 @@ int main(int argc, char const *argv[])
     setting_scene = new SettingScene();
     introduce_scene = new IntroduceScene();
     death_scene = new DeathScene();
+    victory_scene = new VictoryScene();
 
     camera = new Camera();
 

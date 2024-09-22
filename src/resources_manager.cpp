@@ -37,6 +37,8 @@ static const std::vector<ImageInfo> image_info_list = {
     {"女鬼", _T("res/img/女鬼.png")},
     {"逃脱失败", _T("res/img/逃脱失败.jpg")},
     {"弹药", _T("res/img/弹药.png")},
+    {"通关画面", _T("res/img/通关画面.jpg")},
+    {"大门", _T("res/img/大门.png")},
 };
 
 static const std::vector<AtlasInfo> atlas_info_list = {
@@ -67,39 +69,6 @@ ResourcesManager *ResourcesManager::instance()
     if (!manager)
         manager = new ResourcesManager();
     return manager;
-}
-
-void ResourcesManager::load()
-{
-    for (const auto &info : image_info_list)
-    {
-        IMAGE *image = new IMAGE();
-        loadimage(image, info.path);
-        if (!check_image_valid(image))
-            throw info.path;
-        image_pool[info.id] = image;
-    }
-    for (const auto &info : atlas_info_list)
-    {
-        Atlas *atlas = new Atlas();
-        atlas->load(info.path, info.num_frame);
-        for (int i = 0; i < info.num_frame; i++)
-        {
-            IMAGE *image = atlas->get_image(i);
-            if (!check_image_valid(image))
-                throw info.path;
-        }
-        atlas_pool[info.id] = atlas;
-    }
-    for (const auto &info : audio_info_list)
-    {
-        int wideLength = MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, nullptr, 0);
-        std::wstring wstr(wideLength, 0);
-        MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, &wstr[0], wideLength);
-        load_audio(info.path, wstr.c_str());
-    }
-    // filp_image();
-    // flip_atlas();
 }
 
 Atlas *ResourcesManager::get_atlas(const std::string &id) const
@@ -157,4 +126,37 @@ void ResourcesManager::flip_atlas(const std::string &src_id, const std::string &
         dst_atlas->add_image(img_flipped);
     }
     atlas_pool[dst_id] = dst_atlas;
+}
+
+void ResourcesManager::load()
+{
+    for (const auto &info : image_info_list)
+    {
+        IMAGE *image = new IMAGE();
+        loadimage(image, info.path);
+        if (!check_image_valid(image))
+            throw info.path;
+        image_pool[info.id] = image;
+    }
+    for (const auto &info : atlas_info_list)
+    {
+        Atlas *atlas = new Atlas();
+        atlas->load(info.path, info.num_frame);
+        for (int i = 0; i < info.num_frame; i++)
+        {
+            IMAGE *image = atlas->get_image(i);
+            if (!check_image_valid(image))
+                throw info.path;
+        }
+        atlas_pool[info.id] = atlas;
+    }
+    for (const auto &info : audio_info_list)
+    {
+        int wideLength = MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, nullptr, 0);
+        std::wstring wstr(wideLength, 0);
+        MultiByteToWideChar(CP_UTF8, 0, info.id.c_str(), -1, &wstr[0], wideLength);
+        load_audio(info.path, wstr.c_str());
+    }
+    // flip_image("enemy_right", "enemy_left", 1);
+    // flip_atlas();
 }

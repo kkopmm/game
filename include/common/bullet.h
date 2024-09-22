@@ -15,7 +15,6 @@ class Bullet : public GameObject
 {
 private:
     Vector2 velocity;
-    CollisionBox *collision_box = nullptr;
     bool is_active = false;
 
 public:
@@ -33,15 +32,9 @@ public:
                                       { 
                                         if(other->get_layer_src() == CollisionLayer::Wall)
                                             set_enable(false);
-                                        set_active(false); 
-                                        });
+                                        set_active(false); });
     };
-    ~Bullet()
-    {
-        if (collision_box != NULL)
-            collision_manager->destroy_collision_box(collision_box);
-        collision_box = nullptr;
-    }
+    ~Bullet() = default;
     void on_update(float delta)
     {
         animation.on_update(delta);

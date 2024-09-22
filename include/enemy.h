@@ -21,7 +21,6 @@ public:
         this->position = pos;
         animation.add_frame(res_manager->get_image("enemy"), 1);
         animation.set_position(position);
-
         collision_box = collision_manager->create_collision_box();
         collision_box->set_position(position);
         collision_box->set_size({32, 32});
@@ -33,7 +32,6 @@ public:
             {
                 this->hp--;
                 other_box->set_enable(false);
-                std::cout << hp;
             }
             if (other_box->get_layer_src() == CollisionLayer::Wall)
             {
@@ -49,10 +47,7 @@ public:
                     set_position({position.x - (pos1.x < pos2.x ? overlap_x : -overlap_x), position.y});
             } });
     }
-    ~Enemy()
-    {
-        collision_manager->destroy_collision_box(collision_box);
-    }
+    ~Enemy() = default;
     void on_update(float delta)
     {
         this->position += velocity * delta;
@@ -64,13 +59,6 @@ public:
         if (hp > 0)
             animation.on_render();
     }
-    void set_position(const Vector2 &pos)
-    {
-        this->position = pos;
-        collision_box->set_position(pos);
-        animation.set_position(pos);
-    }
-
     void dead()
     {
         collision_box->set_enable(false);
@@ -83,7 +71,6 @@ public:
 
 private:
     Vector2 velocity = Vector2(0, 0);
-    CollisionBox *collision_box = nullptr;
 };
 
 #endif // _ENEMY_H

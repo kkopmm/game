@@ -12,10 +12,6 @@ Player::Player()
     walk_left.add_frame(res_manager->get_image("player_walk_left"), 4);
     walk_right.add_frame(res_manager->get_image("player_walk_right"), 4);
     walk_up.add_frame(res_manager->get_image("player_walk_up"), 4);
-    walk_down.set_position(position);
-    walk_left.set_position(position);
-    walk_right.set_position(position);
-    walk_up.set_position(position);
     walk_down.set_interval(0.1f);
     walk_left.set_interval(0.1f);
     walk_right.set_interval(0.1f);
@@ -34,6 +30,7 @@ Player::Player()
 
     bullet = new Bullet(position, {0, 0});
     bullet->set_active(false);
+
     attack_timer.set_one_shot(true);
     attack_timer.set_wait_time(1.0f);
     attack_timer.set_on_timeout([&]
@@ -63,21 +60,9 @@ Player::Player()
             timer_invulnerable.restart();
             } });
 }
-Player::~Player()
-{
-    if (collision_box)
-        collision_manager->destroy_collision_box(collision_box);
-    collision_box = nullptr;
-}
-void Player::set_position(const Vector2 &position)
-{
-    this->position = position;
-    current_animation->set_position(position);
-}
-const Vector2 &Player::get_position()
-{
-    return position;
-}
+Player::~Player(){
+    delete bullet;
+};
 void Player::set_hp(int hp)
 {
     this->hp = hp;
@@ -98,8 +83,9 @@ void Player::attack()
 {
     if (!can_attack || bullet_count <= 0)
         return;
-    bullet_count--;
+    
     can_attack = false;
+    bullet_count--;
     bullet->set_enable(true);
     bullet->set_position(position);
     bullet->set_active(true);
@@ -117,6 +103,10 @@ void Player::attack()
 int Player::get_bullet_count() const
 {
     return bullet_count;
+}
+void Player::set_bullet_count(int bullet_count)
+{
+    this->bullet_count = bullet_count;
 }
 float Player::get_speed() const
 {
@@ -211,10 +201,12 @@ void Player::on_update(float delta)
     // 体力恢复
     if (!is_running && !is_walking)
         sp = min(1000, sp + 3);
+    
     sp_timer.on_update(delta);
     bullet->on_update(delta);
     attack_timer.on_update(delta);
     collision_box->set_position(position);
+    current_animation->set_position(position);
     current_animation->on_update(delta);
     timer_invulnerable.on_update(delta);
 };

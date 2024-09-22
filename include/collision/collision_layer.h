@@ -9,6 +9,7 @@ enum class CollisionLayer
     Bullet,
     Prop,
     Wall,
+    Door,
 };
 
 #endif // _COLLISION_LAYER_H

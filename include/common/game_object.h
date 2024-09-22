@@ -4,15 +4,22 @@
 #include "resources_manager.h"
 #include "vector2.h"
 #include "animation.h"
+#include "collision_box.h"
 
 extern ResourcesManager *res_manager;
+extern CollisionManager *collision_manager;
+
 class GameObject
 {
 public:
     GameObject() = default;
     GameObject(const Vector2 &pos) : position(pos) {}
-    ~GameObject() = default;
-
+    ~GameObject()
+    {
+        if (collision_box)
+            collision_manager->destroy_collision_box(collision_box);
+        collision_box = nullptr;
+    };
     void on_update(float delta)
     {
         animation.on_update(delta);
@@ -29,10 +36,19 @@ public:
     {
         return position;
     }
+    void set_size(const Vector2 &size)
+    {
+        this->size = size;
+    }
+    const Vector2 &get_size() const
+    {
+        return size;
+    }
 
 protected:
     Animation animation;
     Vector2 position;
+    CollisionBox *collision_box = nullptr;
     Vector2 size = Vector2(64, 64);
 };
 

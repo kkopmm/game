@@ -10,6 +10,7 @@ extern Scene *menu_scene;
 extern Scene *game_scene;
 extern Scene *introduce_scene;
 extern Scene *death_scene;
+extern Scene *victory_scene;
 
 enum class SceneType
 {
@@ -18,6 +19,7 @@ enum class SceneType
 	Setting,
 	Introduce,
 	Death,
+	Victory,
 	Exit
 };
 
@@ -68,6 +70,10 @@ public:
 		case SceneType::Death:
 			std::cout << "进入Death场景";
 			current_scene = death_scene;
+			break;
+		case SceneType::Victory:
+			std::cout << "进入Victory场景";
+			current_scene = victory_scene;
 			break;
 		case SceneType::Exit:
 			std::cout << "进入Exit场景";
