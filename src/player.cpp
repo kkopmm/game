@@ -83,7 +83,10 @@ void Player::set_speed(float speed)
 void Player::attack()
 {
     if (!can_attack || bullet_count <= 0)
+    {
+        play_audio(L"子弹耗尽", false);
         return;
+    }
 
     can_attack = false;
     bullet_count--;
@@ -91,10 +94,7 @@ void Player::attack()
     bullet->set_position(position);
     bullet->set_active(true);
 
-    if (bullet_count == 0)
-        play_audio(L"子弹耗尽", false);
-    else
-        play_audio(L"手枪", false);
+    play_audio(L"手枪", false);
 
     attack_timer.restart();
     if (direction == Direction::Up)
