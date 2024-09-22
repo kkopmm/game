@@ -34,6 +34,11 @@ inline void play_audio(const LPCTSTR &id, bool is_loop = true)
     if (!music_on)
         return;
     static TCHAR str_cmd[512];
+    if (!is_loop)
+    {
+        _stprintf_s(str_cmd, _T("seek %s to start"), id);
+        mciSendString(str_cmd, NULL, 0, NULL);
+    }
     _stprintf_s(str_cmd, _T("play %s %s"), id, is_loop ? _T("repeat") : _T(""));
     mciSendString(str_cmd, NULL, 0, NULL);
 }
