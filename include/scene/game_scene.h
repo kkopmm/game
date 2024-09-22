@@ -37,7 +37,7 @@ public:
     {
         camera->reset();
         player = new Player();
-        door = new Door({64 * 0, 64*20});
+        door = new Door({64 * 0, 64 * 20});
         player->set_position({100, 100});
         for (int i = 0; i < 22; i++)
         {
@@ -94,10 +94,16 @@ public:
         }
         camera->set_position(player->get_position() - Vector2(640, 350));
         sp_progress_bar.set_progress(player->get_sp() / 1000.0f);
-        if (player->get_hp() <= 0)
-            scene_manager->switch_to(SceneType::Death);
-        if(door->is_vctor)
+        if (door->is_vctor)
+        {
             scene_manager->switch_to(SceneType::Victory);
+            return;
+        }
+        if (player->get_hp() <= 0)
+        {
+            scene_manager->switch_to(SceneType::Death);
+            return;
+        }
     };
     void on_draw()
     {
@@ -114,8 +120,12 @@ public:
         settextcolor(WHITE);
         settextstyle(30, 0, _T("楷体"));
 
+        
+        Rect r;
+        r = {0, 0, 1300, 720};
+        putimage_ex(res_manager->get_image("z0"), &r);
         // 绘制爱心图标
-        Rect r = {0, 0, 64, 64};
+        r = {0, 0, 64, 64};
         putimage_ex(res_manager->get_image("爱心"), &r);
         outtextxy(70, 20, std::to_wstring(player->get_hp()).c_str());
         // 绘制弹药图标
@@ -134,8 +144,6 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
-
-    
 
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
@@ -158,7 +166,7 @@ private:
         '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '0', '1', '1', '1', '0', '1',
         '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '1', '0', '1', '0', '0', '0', '1',
         '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '0', '1', '1', '1',
-        '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
+        '3', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'};
     char map1[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
