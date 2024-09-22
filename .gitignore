@@ -1,6 +1,6 @@
 /build
 /.vscode
-/res
+/res/sound
 /out
 **/*.exe
 .vs

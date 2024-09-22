@@ -10,6 +10,7 @@ class CollisionManager
 public:
     static CollisionManager *instance();
     CollisionBox *create_collision_box();
+    CollisionBox *CollisionManager::create_collision_box(const Vector2 &position);
     void destroy_collision_box(CollisionBox *collision_box);
 
     void process_collisions();

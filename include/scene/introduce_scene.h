@@ -17,7 +17,7 @@ public:
     void on_enter() {};
     void on_exit() {};
     void on_update(float delta) {};
-    void on_draw(const Camera &camera)
+    void on_draw()
     {
         setbkcolor(BLACK);
         settextcolor(WHITE);
@@ -27,6 +27,7 @@ public:
         outtextxy(200, 170, _T("A左"));
         outtextxy(400, 170, _T("D右"));
         outtextxy(700, 170, _T("【空格】发射子弹"));
+        outtextxy(700, 70, _T("R奔跑"));
         outtextxy(70, 300, _T("用七发子弹的枪逃离迷宫，地上的道具会帮助你！！！"));
         settextcolor(RED);
         outtextxy(200, 450, _T("【警告】不要被怪物碰到三次【警告】"));

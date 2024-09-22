@@ -3,8 +3,9 @@
 
 #include <easyx.h>
 
-#include "scene.h"
+#include "scene_manager.h"
 #include "util.h"
+
 
 extern bool music_on;
 extern SceneManager *scene_manager;
@@ -12,12 +13,10 @@ extern SceneManager *scene_manager;
 class SettingScene : public Scene
 {
 public:
-    void on_enter() {
-    };
-    void on_exit() {
-    };
+    void on_enter() {};
+    void on_exit() {};
     void on_update(float delta) {};
-    void on_draw(const Camera &camera)
+    void on_draw()
     {
         int x = 550;
         int y = 300;

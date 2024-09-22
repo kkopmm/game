@@ -48,4 +48,21 @@ inline void stop_all_audio()
 {
     mciSendString(_T("stop all"), NULL, 0, NULL);
 }
+
+inline void sketch_image(IMAGE *src, IMAGE *dst)
+{
+    int w = src->getwidth(), h = src->getheight();
+    Resize(dst, w, h);
+    DWORD *src_buffer = GetImageBuffer(src);
+    DWORD *dst_buffer = GetImageBuffer(dst);
+    for (int y = 0; y < w * h; y++)
+    {
+        for (int x = 0; x < w; x++)
+        {
+            int idx = y * w + x;
+            dst_buffer[idx] = BGR(RGB(255, 255, 255)) | (src_buffer[idx] & 0xFF000000);
+        }
+    }
+}
+
 #endif // _UTIL_H

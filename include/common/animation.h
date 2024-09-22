@@ -5,9 +5,12 @@
 #include "timer.h"
 #include "atlas.h"
 #include "vector2.h"
+#include "camera.h"
 
 #include <vector>
 #include <functional>
+
+extern Camera *camera;
 
 class Animation
 {
@@ -111,10 +114,12 @@ public:
     {
         const Frame &frame = frame_list[idx_frame];
         Rect rect_dst;
-        rect_dst.x = (int)position.x - frame.rect_src.w / 2;
+        rect_dst.x = (int)(position.x - frame.rect_src.w / 2);
         rect_dst.y = (anchor_mode == AnchorMode::Centered)
                          ? (int)position.y - frame.rect_src.h / 2
                          : (int)position.y - frame.rect_src.h;
+        rect_dst.x -= (int)camera->get_position().x;
+        rect_dst.y -= (int)camera->get_position().y;
         rect_dst.w = frame.rect_src.w;
         rect_dst.h = frame.rect_src.h;
         putimage_ex(frame.image, &rect_dst, &frame.rect_src);

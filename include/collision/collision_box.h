@@ -2,8 +2,10 @@
 #define _COLLISION_BOX_H
 
 #include "vector2.h"
+#include "collision_box.h"
 #include "collision_layer.h"
 
+#include <unordered_set>
 #include <functional>
 
 class CollisionManager;
@@ -13,13 +15,12 @@ class CollisionBox
     friend class CollisionManager;
 
 private:
-    bool enable;
+    bool enable = true;
     Vector2 size;
     Vector2 position;
-    CollisionLayer layer;
-    std::function<void()> on_collide;
+    std::function<void(CollisionBox *)> on_collide;
     CollisionLayer layer_src = CollisionLayer::None;
-    CollisionLayer layer_dst = CollisionLayer::None;
+    std::unordered_set<CollisionLayer> layer_dst = {};
 
 public:
     CollisionBox() = default;
@@ -34,15 +35,11 @@ public:
     {
         this->position = position;
     };
-    void set_layer(CollisionLayer layer)
-    {
-        this->layer = layer;
-    };
     void set_enable(bool enable)
     {
         this->enable = enable;
     };
-    void set_on_collide(std::function<void()> on_collide)
+    void set_on_collide(std::function<void(CollisionBox *)> on_collide)
     {
         this->on_collide = on_collide;
     };
@@ -50,14 +47,23 @@ public:
     {
         this->layer_src = layer;
     };
-    void set_layer_dst(CollisionLayer layer)
+    CollisionLayer get_layer_src() const
+    {
+        return this->layer_src;
+    }
+    void set_layer_dst(std::unordered_set<CollisionLayer> layer)
     {
         this->layer_dst = layer;
     };
+
     const Vector2 &get_size() const
     {
         return this->size;
     };
+    const Vector2 &get_position() const
+    {
+        return this->position;
+    }
 };
 
 #endif // _COLLISION_BOX_H

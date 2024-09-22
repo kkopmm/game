@@ -12,6 +12,10 @@ public:
     {
         return position;
     }
+    void set_position(const Vector2 &pos)
+    {
+        position = pos;
+    }
     void reset()
     {
         position.x = 0;

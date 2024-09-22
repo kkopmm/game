@@ -2,17 +2,141 @@
 #define _GAME_SCENE_H
 
 #include "scene.h"
+#include "util.h"
+#include "camera.h"
+#include "player_.h"
+#include "animation.h"
+#include "collision_manager.h"
+#include "collision_box.h"
+#include "wall.h"
+#include "floor.h"
+#include "enemy.h"
+#include "progress_bar.h"
+#include "scene_manager.h"
+#include "util.h"
+
+#include <vector>
+#include <string>
+
+extern ResourcesManager *res_manager;
+extern CollisionManager *collision_manager;
+extern SceneManager *scene_manager;
+extern Camera *camera;
 
 class GameScene : public Scene
 {
 public:
     GameScene() = default;
     ~GameScene() = default;
-    virtual void on_enter() {};
-    virtual void on_exit() {};
-    virtual void on_update(float delta) {};
-    virtual void on_draw() {};
-    virtual void on_input(const ExMessage &msg) {};
+    void on_enter()
+    {
+        camera->reset();
+        for (int i = 0; i < 22; i++)
+        {
+            std::vector<GameObject *> m;
+            for (int j = 0; j < 22; j++)
+            {
+                if (map0[i][j] == '1')
+                {
+                    m.push_back(new Wall({j * 64.0f, i * 64.0f}));
+                }
+                else if (map0[i][j] == '0')
+                {
+                    m.push_back(new Floor({j * 64.0f, i * 64.0f}));
+                }
+            }
+            map.push_back(m);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            enemy_loop.push_back(new Enemy({(float)(rand() % 1280), (float)(rand() % 720)}));
+        }
+        player.set_position({100, 100});
+        stop_all_audio();
+        play_audio(L"游戏背景音乐", true);
+    };
+    void on_exit()
+    {
+        stop_audio(L"游戏背景音乐");
+    };
+    void on_update(float delta)
+    {
+        player.on_update(delta);
+        for (auto &enemy : enemy_loop)
+        {
+            if (enemy->hp <= 0)
+            {
+                enemy->dead();
+                continue;
+            }
+            Vector2 pos1 = player.get_position();
+            Vector2 pos2 = enemy->get_position();
+            enemy->set_velocity((pos1 - pos2).normalize() * 80.0f);
+            enemy->on_update(delta);
+        }
+        camera->set_position(player.get_position() - Vector2(640, 350));
+        sp_progress_bar.set_progress(player.get_sp() / 1000.0f);
+        if (player.get_hp() <= 0)
+            scene_manager->switch_to(SceneType::Death);
+    };
+    void on_draw()
+    {
+        for (auto &wall : map)
+            for (auto &w : wall)
+                w->on_draw();
+        for (auto &enemy : enemy_loop)
+            enemy->on_draw();
+        player.on_draw();
+        setbkcolor(BLACK);
+        settextcolor(WHITE);
+        settextstyle(30, 0, _T("楷体"));
+        Rect r = {0, 0, 64, 64};
+        putimage_ex(res_manager->get_image("爱心"), &r);
+        outtextxy(70, 20, std::to_wstring(player.get_hp()).c_str());
+
+        setbkcolor(BLACK);
+        settextcolor(WHITE);
+        settextstyle(30, 0, _T("楷体"));
+        r = {100, 0, 64, 64};
+        putimage_ex(res_manager->get_image("弹药"), &r);
+        outtextxy(180, 20, std::to_wstring(player.get_bullet_count()).c_str());
+
+        sp_progress_bar.on_draw();
+    };
+    void on_input(const ExMessage &msg)
+    {
+        player.on_input(msg);
+    };
+
+private:
+    _Player player = _Player();
+    std::vector<std::vector<GameObject *>> map;
+    std::vector<Enemy *> enemy_loop;
+    ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
+
+    char map0[22][22] = {
+        '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+        '1', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1',
+        '1', '0', '1', '1', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1', '0', '1', '1', '1', '1', '1', '0', '1',
+        '1', '0', '1', '0', '1', '0', '0', '0', '1', '1', '0', '1', '0', '1', '0', '0', '0', '0', '0', '0', '0', '1',
+        '1', '0', '1', '0', '1', '1', '1', '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '1',
+        '1', '0', '1', '0', '1', '0', '1', '1', '0', '1', '0', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '1',
+        '1', '0', '1', '0', '0', '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1',
+        '1', '0', '1', '1', '1', '1', '0', '1', '0', '1', '0', '1', '0', '0', '0', '1', '0', '1', '0', '0', '0', '1',
+        '1', '0', '0', '0', '0', '1', '0', '1', '0', '1', '0', '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '1',
+        '1', '0', '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '0', '0', '1', '0', '1',
+        '1', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '1', '0', '1',
+        '1', '0', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '0', '0', '0', '1',
+        '1', '0', '1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '1', '1', '1',
+        '1', '0', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '0', '0', '1', '0', '1',
+        '1', '0', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '1', '1', '1', '0', '1', '0', '1',
+        '1', '0', '1', '0', '1', '1', '1', '1', '0', '1', '1', '1', '0', '0', '0', '0', '0', '1', '0', '1', '0', '1',
+        '1', '0', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '1', '1', '1', '0', '0', '0', '1', '0', '1',
+        '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '0', '1', '1', '1', '0', '1',
+        '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '1', '0', '1', '0', '0', '0', '1',
+        '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '0', '1', '1', '1',
+        '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
+        '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'};
 };
 
 #endif // _GAME_SCENE_H

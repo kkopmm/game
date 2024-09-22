@@ -2,22 +2,35 @@
 #include "resources_manager.h"
 #include "animation.h"
 
+
+#include "scene.h"
+#include "scene_manager.h"
+#include "death_scene.h"
 #include "menu_scene.h"
 #include "setting_scene.h"
 #include "game_scene.h"
-#include "scene_manager.h"
+#include "introduce_scene.h"
+
+#include "collision_manager.h"
+#include "camera.h"
 
 #include <chrono>
 #include <thread>
 #include <graphics.h>
 
 ResourcesManager *res_manager = ResourcesManager::instance();
+CollisionManager *collision_manager = CollisionManager::instance();
 SceneManager *scene_manager = new SceneManager();
 Scene *menu_scene = nullptr;
 Scene *setting_scene = nullptr;
 Scene *game_scene = nullptr;
+Scene *introduce_scene = nullptr;
+Scene *death_scene = nullptr;
 
-bool music_on = true;
+Camera *camera = nullptr;
+
+bool music_on = false;
+bool is_debug = true;
 
 int main(int argc, char const *argv[])
 {
@@ -41,8 +54,12 @@ int main(int argc, char const *argv[])
 
     // 场景初始化
     menu_scene = new MenuScene();
-    setting_scene = new SettingScene();
     game_scene = new GameScene();
+    setting_scene = new SettingScene();
+    introduce_scene = new IntroduceScene();
+    death_scene = new DeathScene();
+
+    camera = new Camera();
 
     scene_manager->set_current_scene(menu_scene);
 
@@ -67,12 +84,14 @@ int main(int argc, char const *argv[])
 
         // TODO: 处理更新
         scene_manager->on_update(delta.count());
+        collision_manager->process_collisions();
         setbkcolor(RGB(0, 0, 0));
         cleardevice();
 
         // TODO: 处理绘图
         scene_manager->on_draw();
-
+        if (is_debug)
+            collision_manager->on_render();
         FlushBatchDraw();
 
         // 稳定帧数

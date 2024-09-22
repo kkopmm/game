@@ -9,6 +9,7 @@ extern Scene *setting_scene;
 extern Scene *menu_scene;
 extern Scene *game_scene;
 extern Scene *introduce_scene;
+extern Scene *death_scene;
 
 enum class SceneType
 {
@@ -34,9 +35,9 @@ public:
 	{
 		current_scene->on_update(delta);
 	}
-	void on_draw(const Camera &camera)
+	void on_draw()
 	{
-		current_scene->on_draw(camera);
+		current_scene->on_draw();
 	}
 	void on_input(const ExMessage &msg)
 	{
@@ -66,9 +67,11 @@ public:
 			break;
 		case SceneType::Death:
 			std::cout << "进入Death场景";
+			current_scene = death_scene;
+			break;
 		case SceneType::Exit:
 			std::cout << "进入Exit场景";
-			
+			exit(0);
 			break;
 		}
 		current_scene->on_enter();

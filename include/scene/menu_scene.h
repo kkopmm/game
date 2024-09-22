@@ -20,14 +20,11 @@ public:
     {
         play_audio(L"菜单背景音乐", true);
     };
-    void on_exit() {
-    };
-    void on_update(float delta) {
-    };
-    void on_draw(const Camera &camera)
+    void on_exit() {};
+    void on_update(float delta) {};
+    void on_draw()
     {
-        const Vector2 &pos_camera = camera.get_position();
-        putimage(int(0 - pos_camera.x), int(0 - pos_camera.y), res_manager->get_image("menu"));
+        putimage(0, 0, res_manager->get_image("menu"));
     };
     void on_input(const ExMessage &msg)
     {

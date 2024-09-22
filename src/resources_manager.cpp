@@ -29,7 +29,14 @@ static const std::vector<ImageInfo> image_info_list = {
     {"player_walk_left", _T("res/img/player/walk_left.png")},
     {"player_walk_right", _T("res/img/player/walk_right.png")},
     {"player_walk_up", _T("res/img/player/walk_up.png")},
-    {"walk", _T("res/img/walk.png")},
+    {"wall", _T("res/img/wall.png")},
+    {"floor", _T("res/img/floor.png")},
+    {"bullet", _T("res/img/bullet.png")},
+    {"enemy", _T("res/img/enemy.png")},
+    {"爱心", _T("res/img/爱心.png")},
+    {"女鬼", _T("res/img/女鬼.png")},
+    {"逃脱失败", _T("res/img/逃脱失败.jpg")},
+    {"弹药", _T("res/img/弹药.png")},
 };
 
 static const std::vector<AtlasInfo> atlas_info_list = {
