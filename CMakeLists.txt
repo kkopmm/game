@@ -21,4 +21,4 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 # add_executable(test ${SOURCES})
 add_executable(test ${CMAKE_SOURCE_DIR}/test.cpp ${SOURCES})
-add_executable(main ${CMAKE_SOURCE_DIR}/main.cpp ${SOURCES})
+# add_executable(main ${CMAKE_SOURCE_DIR}/main.cpp ${SOURCES})
