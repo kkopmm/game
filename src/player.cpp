@@ -60,7 +60,8 @@ Player::Player()
             timer_invulnerable.restart();
             } });
 }
-Player::~Player(){
+Player::~Player()
+{
     delete bullet;
 };
 void Player::set_hp(int hp)
@@ -83,12 +84,17 @@ void Player::attack()
 {
     if (!can_attack || bullet_count <= 0)
         return;
-    
+
     can_attack = false;
     bullet_count--;
     bullet->set_enable(true);
     bullet->set_position(position);
     bullet->set_active(true);
+
+    if (bullet_count == 0)
+        play_audio(L"子弹耗尽", false);
+    else
+        play_audio(L"手枪", false);
 
     attack_timer.restart();
     if (direction == Direction::Up)
@@ -201,7 +207,7 @@ void Player::on_update(float delta)
     // 体力恢复
     if (!is_running && !is_walking)
         sp = min(1000, sp + 3);
-    
+
     sp_timer.on_update(delta);
     bullet->on_update(delta);
     attack_timer.on_update(delta);
