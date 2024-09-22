@@ -33,6 +33,7 @@ public:
     void on_draw()
     {
         if (!is_timeout) {
+            play_audio(L"尖叫声",false);
             putimage(0, 0, res_manager->get_image("女鬼"));
             timer.resume();
         }else{
