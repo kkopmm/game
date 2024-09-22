@@ -12,7 +12,7 @@
 
 extern CollisionManager *collision_manager;
 
-class _Player
+class Player
 {
 private:
     enum class Direction
@@ -51,8 +51,8 @@ private:
     Bullet *bullet;
 
 public:
-    _Player();
-    ~_Player();
+    Player();
+    ~Player();
     void on_draw();
     void on_update(float delta);
     void on_input(const ExMessage &msg);

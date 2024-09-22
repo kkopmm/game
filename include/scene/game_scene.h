@@ -4,7 +4,7 @@
 #include "scene.h"
 #include "util.h"
 #include "camera.h"
-#include "player_.h"
+#include "player.h"
 #include "animation.h"
 #include "collision_manager.h"
 #include "collision_box.h"
@@ -109,7 +109,7 @@ public:
     };
 
 private:
-    _Player player = _Player();
+    Player player = Player();
     std::vector<std::vector<GameObject *>> map;
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);

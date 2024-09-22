@@ -1,4 +1,4 @@
-#include "player_.h"
+#include "player.h"
 #include "resources_manager.h"
 #include "collision_layer.h"
 
@@ -6,7 +6,7 @@
 
 extern ResourcesManager *res_manager;
 
-_Player::_Player()
+Player::Player()
 {
     walk_down.add_frame(res_manager->get_image("player_walk_down"), 4);
     walk_left.add_frame(res_manager->get_image("player_walk_left"), 4);
@@ -63,38 +63,38 @@ _Player::_Player()
             timer_invulnerable.restart();
             } });
 }
-_Player::~_Player()
+Player::~Player()
 {
     if (collision_box)
         collision_manager->destroy_collision_box(collision_box);
     collision_box = nullptr;
 }
-void _Player::set_position(const Vector2 &position)
+void Player::set_position(const Vector2 &position)
 {
     this->position = position;
     current_animation->set_position(position);
 }
-const Vector2 &_Player::get_position()
+const Vector2 &Player::get_position()
 {
     return position;
 }
-void _Player::set_hp(int hp)
+void Player::set_hp(int hp)
 {
     this->hp = hp;
 }
-int _Player::get_hp() const
+int Player::get_hp() const
 {
     return hp;
 }
-int _Player::get_sp() const
+int Player::get_sp() const
 {
     return sp;
 }
-void _Player::set_speed(float speed)
+void Player::set_speed(float speed)
 {
     this->speed = speed;
 }
-void _Player::attack()
+void Player::attack()
 {
     if (!can_attack || bullet_count <= 0)
         return;
@@ -114,15 +114,15 @@ void _Player::attack()
     else if (direction == Direction::Right)
         bullet->set_velocity({1000, 0});
 }
-int _Player::get_bullet_count() const
+int Player::get_bullet_count() const
 {
     return bullet_count;
 }
-float _Player::get_speed() const
+float Player::get_speed() const
 {
     return speed;
 }
-void _Player::on_input(const ExMessage &msg)
+void Player::on_input(const ExMessage &msg)
 {
     if (msg.message == WM_KEYDOWN)
     {
@@ -163,7 +163,7 @@ void _Player::on_input(const ExMessage &msg)
         }
     };
 };
-void _Player::on_update(float delta)
+void Player::on_update(float delta)
 {
     if (velocity.y < 0)
     {
@@ -218,7 +218,7 @@ void _Player::on_update(float delta)
     current_animation->on_update(delta);
     timer_invulnerable.on_update(delta);
 };
-void _Player::on_draw()
+void Player::on_draw()
 {
     current_animation->on_render();
     bullet->on_draw();
