@@ -4,11 +4,12 @@
 #include <easyx.h>
 
 #include "scene_manager.h"
+#include "resources_manager.h"
 #include "util.h"
-
 
 extern bool music_on;
 extern SceneManager *scene_manager;
+extern ResourcesManager *res_manager;
 
 class SettingScene : public Scene
 {

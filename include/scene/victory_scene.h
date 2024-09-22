@@ -14,10 +14,13 @@ public:
     {
         play_audio(L"胜利音乐");
     };
-    void on_exit() {};
+    void on_exit() {
+        stop_audio(L"胜利音乐");
+    };
     void on_update(float delta) {};
     void on_draw()
     {
+        
         putimage(0, 0, res_manager->get_image("通关画面"));
     };
     void on_input(const ExMessage &msg) {};
