@@ -39,31 +39,26 @@ public:
     {
         camera->reset();
         player = new Player();
-        door = new Door({64 * 0, 64 * 20});
         player->set_position({100, 100});
+        // 道具在这里添加
+        game_object_loop = {
+            new PropBullet({64 * 1, 64 * 3}),
+            new Flashlight({64 * 1, 64 * 3}),
+        };
+
         // 随机选择地图
         int level = rand() % 2;
-        char(*select_map)[22];
         if (level == 0)
-            select_map = map0;
-        else if (level == 1)
-            select_map = map1;
-        // 加载地图
-        for (int i = 0; i < 22; i++)
         {
-            std::vector<GameObject *> m;
-            char *row_ptr = *(select_map + i);
-            for (int j = 0; j < 22; j++)
-            {
-                if (*(row_ptr + j) == '1')
-                    m.push_back(new Wall({j * 64.0f, i * 64.0f}));
-                else if (*(row_ptr + j) == '0')
-                    m.push_back(new Floor({j * 64.0f, i * 64.0f}));
-                else
-                    m.push_back(nullptr);
-            }
-            map.push_back(m);
+            load_map(this->map0);
+            door = new Door({64 * 20, 64 * 20});
         }
+        else if (level == 1)
+        {
+            load_map(this->map1);
+            door = new Door({64 * 20, 64 * 20});
+        }
+        // 随机生成怪物
         for (int i = 0; i < 10; i++)
         {
             enemy_loop.push_back(new Enemy({(float)(rand() % 1280), (float)(rand() % 720)}));
@@ -78,18 +73,22 @@ public:
                 delete w;
         for (auto &enemy : enemy_loop)
             delete enemy;
+        for (GameObject *game_object : game_object_loop)
+            delete game_object;
         map.clear();
         enemy_loop.clear();
+        game_object_loop.clear();
         delete door;
         delete player;
-        player = nullptr;
         stop_all_audio();
     };
     void on_update(float delta)
     {
         player->on_update(delta);
-        door->on_update(delta);
-        propbullet.on_update(delta);
+        // door->on_update(delta);
+        for (GameObject *game_object : game_object_loop)
+            game_object->on_update(delta);
+
         for (auto &enemy : enemy_loop)
         {
             Vector2 pos1 = player->get_position();
@@ -126,9 +125,11 @@ public:
                 return;
             }
         }
+        for (GameObject *game_object : game_object_loop)
+            game_object->on_draw();
+
         player->on_draw();
         door->on_draw();
-        propbullet.on_draw();
 
         setbkmode(TRANSPARENT);
         settextcolor(WHITE);
@@ -137,7 +138,10 @@ public:
         Rect r;
         // 绘制视野
         r = {0, 0, 1300, 720};
-        // putimage_ex(res_manager->get_image("z0"), &r);
+        if(!player->get_has_flashlight())
+            putimage_ex(res_manager->get_image("z0"), &r);
+        else
+            putimage_ex(res_manager->get_image("z1"), &r);
         // 绘制爱心图标
         r = {0, 0, 64, 64};
         putimage_ex(res_manager->get_image("爱心"), &r);
@@ -160,8 +164,27 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
-    PropBullet propbullet = PropBullet({64 * 2, 64 * 1});
+    std::vector<GameObject *> game_object_loop;
 
+    // 加载地图
+    void load_map(char (*select_map)[22])
+    {
+        for (int i = 0; i < 22; i++)
+        {
+            std::vector<GameObject *> m;
+            char *row_ptr = *(select_map + i);
+            for (int j = 0; j < 22; j++)
+            {
+                if (*(row_ptr + j) == '1')
+                    m.push_back(new Wall({j * 64.0f, i * 64.0f}));
+                else if (*(row_ptr + j) == '0')
+                    m.push_back(new Floor({j * 64.0f, i * 64.0f}));
+                else
+                    m.push_back(nullptr);
+            }
+            map.push_back(m);
+        }
+    }
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
         '1', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1',
