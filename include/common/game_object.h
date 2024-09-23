@@ -23,6 +23,11 @@ public:
     };
     void on_update(float delta)
     {
+        if (collision_box)
+        {
+            position = collision_box->get_position();
+            animation.set_position(position);
+        }
         animation.on_update(delta);
     };
     void on_draw()

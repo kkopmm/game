@@ -17,7 +17,8 @@
 #include "wall.h"
 #include "floor.h"
 #include "enemy.h"
-#include "flashlight.h"
+#include "prop_flashlight.h"
+#include "prop_bullet.h"
 
 #include <vector>
 #include <string>
@@ -88,6 +89,7 @@ public:
     {
         player->on_update(delta);
         door->on_update(delta);
+        propbullet.on_update(delta);
         for (auto &enemy : enemy_loop)
         {
             Vector2 pos1 = player->get_position();
@@ -126,7 +128,7 @@ public:
         }
         player->on_draw();
         door->on_draw();
-        flashlight.on_draw();
+        propbullet.on_draw();
 
         setbkmode(TRANSPARENT);
         settextcolor(WHITE);
@@ -158,7 +160,7 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
-    Flashlight flashlight = Flashlight({64 * 2, 64 * 1});
+    PropBullet propbullet = PropBullet({64 * 2, 64 * 1});
 
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',

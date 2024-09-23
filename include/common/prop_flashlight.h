@@ -16,8 +16,8 @@ public:
         animation.set_scale(0.5f);
         collision_box = collision_manager->create_collision_box(pos);
         collision_box->set_size({32, 32});
-        collision_box->set_layer_src(CollisionLayer::Prop);
-        collision_box->set_layer_src({CollisionLayer::Player});
+        collision_box->set_layer_src(CollisionLayer::Prop_flashlight);
+        collision_box->set_layer_dst({CollisionLayer::Player});
     };
     ~Flashlight() = default;
 };
