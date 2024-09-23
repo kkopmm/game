@@ -41,10 +41,6 @@ public:
         player = new Player();
         player->set_position({100, 100});
         // 道具在这里添加
-        game_object_loop = {
-            new PropBullet({64 * 1, 64 * 3}),
-            new Flashlight({64 * 1, 64 * 3}),
-        };
 
         // 随机选择地图
         int level = rand() % 2;
@@ -52,6 +48,10 @@ public:
         {
             load_map(this->map0);
             door = new Door({64 * 20, 64 * 20});
+            game_object_loop = {
+                new PropBullet({64 * 1, 64 * 3}),
+                new Flashlight({64 * 1, 64 * 3}),
+            };
         }
         else if (level == 1)
         {
@@ -111,10 +111,33 @@ public:
     };
     void on_draw()
     {
+        if (is_stop)
+        {
+            int x = 550;
+            int y = 300;
+            int w = 150;
+            int h = 50;
+            int tx = x + (w - textwidth(_T("开启音乐"))) / 2;
+            int ty = y + (h - textheight(_T("开启音乐"))) / 2;
+            putimage(0, 0, res_manager->get_image("menu1"));
+            setbkmode(TRANSPARENT);
+            settextstyle(30, 0, _T("黑体")); // 设置字体
+            setfillcolor(BROWN);             // 设置填充颜色
+            settextcolor(WHITE);             // 设置文字颜色
+            fillroundrect(x, y, x + w, y + h, 10, 10);
+            fillroundrect(x, y + 100, x + w, y + h + 100, 10, 10);
+            fillroundrect(x, y + 200, x + w, y + h + 200, 10, 10);
+            outtextxy(tx, ty, _T("继续游戏"));
+            outtextxy(tx, ty + 100, _T("重新开始"));
+            outtextxy(tx, ty + 200, _T("返回菜单"));
+            return;
+        }
+
         for (auto &wall : map)
             for (auto &w : wall)
                 if (w)
                     w->on_draw();
+
         bool surprise = false;
         for (auto &enemy : enemy_loop)
         {
@@ -138,7 +161,7 @@ public:
         Rect r;
         // 绘制视野
         r = {0, 0, 1300, 720};
-        if(!player->get_has_flashlight())
+        if (!player->get_has_flashlight())
             putimage_ex(res_manager->get_image("z0"), &r);
         else
             putimage_ex(res_manager->get_image("z1"), &r);
@@ -156,6 +179,26 @@ public:
     void on_input(const ExMessage &msg)
     {
         player->on_input(msg);
+        if (msg.message == WM_KEYUP && msg.vkcode == VK_TAB)
+            is_stop = !is_stop;
+        if (msg.message == WM_LBUTTONDOWN && is_stop)
+        {
+            if (msg.x >= 550 && msg.x <= 700)
+            {
+                if (msg.y >= 300 && msg.y <= 350)
+                    is_stop = false;
+                if (msg.y >= 400 && msg.y <= 450)
+                {
+                    is_stop = false;    
+                    scene_manager->switch_to(SceneType::Game);
+                }
+                if (msg.y >= 500 && msg.y <= 550) // 返回菜单
+                {
+                    is_stop = false;
+                    scene_manager->switch_to(SceneType::Menu);
+                }
+            }
+        }
     };
 
 private:
@@ -165,6 +208,7 @@ private:
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
     std::vector<GameObject *> game_object_loop;
+    bool is_stop = false;
 
     // 加载地图
     void load_map(char (*select_map)[22])
@@ -206,7 +250,7 @@ private:
         '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '0', '1', '1', '1', '0', '1',
         '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '1', '0', '1', '0', '0', '0', '1',
         '1', '1', '1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '0', '1', '1', '1',
-        '3', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
+        '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'};
     char map1[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
