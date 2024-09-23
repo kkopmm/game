@@ -38,6 +38,7 @@ private:
     AnchorMode anchor_mode = AnchorMode::Centered;
     std::vector<Frame> frame_list;
     std::function<void()> on_finished;
+    float scale = 1.0f;
 
 public:
     Animation()
@@ -61,26 +62,12 @@ public:
         timer.restart();
         idx_frame = 0;
     }
-    void set_loop(bool is_loop)
-    {
-        this->is_loop = is_loop;
-    }
-    void set_anchor_mode(AnchorMode anchor_mode)
-    {
-        this->anchor_mode = anchor_mode;
-    }
-    void set_on_finished(std::function<void()> on_finished)
-    {
-        this->on_finished = on_finished;
-    }
-    void set_interval(float interval)
-    {
-        timer.set_wait_time(interval);
-    }
-    void set_position(const Vector2 &position)
-    {
-        this->position = position;
-    }
+    void set_loop(bool is_loop) { this->is_loop = is_loop; }
+    void set_anchor_mode(AnchorMode anchor_mode) { this->anchor_mode = anchor_mode; }
+    void set_on_finished(std::function<void()> on_finished) { this->on_finished = on_finished; }
+    void set_interval(float interval) { timer.set_wait_time(interval); }
+    void set_position(const Vector2 &position) { this->position = position; }
+    void set_scale(float scale) { this->scale = scale; };
 
     void add_frame(IMAGE *image, int num_h)
     {
@@ -114,14 +101,14 @@ public:
     {
         const Frame &frame = frame_list[idx_frame];
         Rect rect_dst;
-        rect_dst.x = (int)(position.x - frame.rect_src.w / 2);
+        rect_dst.x = (int)(position.x - scale * frame.rect_src.w / 2);
         rect_dst.y = (anchor_mode == AnchorMode::Centered)
-                         ? (int)position.y - frame.rect_src.h / 2
-                         : (int)position.y - frame.rect_src.h;
+                         ? (int)(position.y - scale * frame.rect_src.h / 2)
+                         : (int)(position.y - scale * frame.rect_src.h);
         rect_dst.x -= (int)camera->get_position().x;
         rect_dst.y -= (int)camera->get_position().y;
-        rect_dst.w = frame.rect_src.w;
-        rect_dst.h = frame.rect_src.h;
+        rect_dst.w = (int)(frame.rect_src.w * scale);
+        rect_dst.h = (int)(frame.rect_src.h * scale);
         putimage_ex(frame.image, &rect_dst, &frame.rect_src);
     }
 };
