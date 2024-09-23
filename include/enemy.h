@@ -85,7 +85,6 @@ public:
         is_dead = true;
         collision_box->set_enable(false);
         set_position({-1000, -1000});
-        play_audio(L"尖叫声", false);
     }
     void set_velocity(const Vector2 &vel)
     {

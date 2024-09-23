@@ -57,9 +57,9 @@ Player::Player()
         else if (other_box->get_layer_src() == CollisionLayer::Enemy&&!is_invulnerable)
         {
             hp--;
-            std::cout << "is_invulnerable: " << is_invulnerable << std::endl;
             is_invulnerable = true;
             timer_invulnerable.restart();
+            play_audio(L"尖叫声", false);
         }
         else if (other_box->get_layer_src() == CollisionLayer::Prop_flashlight)
         {
