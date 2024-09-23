@@ -112,30 +112,30 @@ public:
     };
     void on_draw()
     {
-        // if(is_stop)
-        // {   
-        //     int x=510, y=380, w=245, h=80;
-        //     int tx = x + (w - textwidth(_T("继续游戏"))) / 2;
-        //     int ty = y + (h - textheight(_T("继续游戏"))) / 2;
-        //     // putimage(0, 0, res_manager->get_image("剧情背景"));
+        if (is_stop)
+        {
+            int x = 510, y = 380, w = 245, h = 80;
+            int tx = x + (w - textwidth(_T("继续游戏"))) / 2;
+            int ty = y + (h - textheight(_T("继续游戏"))) / 2;
+            // putimage(0, 0, res_manager->get_image("剧情背景"));
 
-        //     // 设置文本样式
-        //     setbkmode(TRANSPARENT);
-        //     settextstyle(30, 0, _T("楷体"));
-        //     setfillcolor(BROWN);
-        //     settextcolor(WHITE);
+            // 设置文本样式
+            setbkmode(TRANSPARENT);
+            settextstyle(30, 0, _T("楷体"));
+            setfillcolor(BROWN);
+            settextcolor(WHITE);
 
-        //     fillroundrect(x, y, x + w, y + h, 10, 10);
-        //     fillroundrect(x, y + 100, x + w, y + h + 100, 10, 10);
-        //     fillroundrect(x, y + 200, x + w, y + h + 200, 10, 10);
+            fillroundrect(x, y, x + w, y + h, 10, 10);
+            fillroundrect(x, y + 100, x + w, y + h + 100, 10, 10);
+            fillroundrect(x, y + 200, x + w, y + h + 200, 10, 10);
 
-        //     // 绘制按钮文本
-        //     outtextxy(tx, ty, _T("继续游戏"));
-        //     outtextxy(tx, ty + 100, _T("重新开始"));
-        //     outtextxy(tx, ty + 200, _T("返回菜单"));
-        //     return;
-        // }
-        
+            // 绘制按钮文本
+            outtextxy(tx, ty, _T("继续游戏"));
+            outtextxy(tx, ty + 100, _T("重新开始"));
+            outtextxy(tx, ty + 200, _T("返回菜单"));
+            return;
+        }
+
         for (auto &wall : map)
             for (auto &w : wall)
                 if (w)
@@ -178,50 +178,25 @@ public:
         outtextxy(180, 20, std::to_wstring(player->get_bullet_count()).c_str());
         // 绘制能量条
         sp_progress_bar.on_draw();
-        
     };
     void on_input(const ExMessage &msg)
     {
-        // // 按esc暂停游戏, 返回菜单或继续游戏
-        // if(msg.message == WM_KEYDOWN && msg.wParam == VK_CONTROL){
-        //     is_stop = !is_stop;
-        //     std::cout<<" asdasd";
-        // }
-        // //if (is_stop){
-        //     // if(msg.x >= 510 && msg.x <= 755 && msg.y >=380 && msg.y <= 460){
-        //     //     // 继续游戏??????
-        //     //         scene_manager->switch_to(SceneType::Game);
-        //     //     }
-        //     //     //重新开始??????
-        //     //     if (msg.x >= 510 && msg.x <= 755 && msg.y >= 480 && msg.y <= 560) {
-        //     //         scene_manager->switch_to(SceneType::Game);
-        //     //     }
-        //     //     //返回菜单
-        //     //     if (msg.x >= 510 && msg.x <= 755 && msg.y >= 580 && msg.y <= 660) {
-        //     //         scene_manager->switch_to(SceneType::Menu);
-        //     //     }
-        // //}
-
-
         player->on_input(msg);
-        if (msg.message == WM_KEYUP && msg.vkcode == VK_TAB)
-            is_stop = !is_stop;
-        if (msg.message == WM_LBUTTONDOWN && is_stop)
+        if (msg.message == WM_KEYUP && msg.vkcode == VK_ESCAPE)
+            this->is_stop = !this->is_stop;
+        if (msg.message == WM_LBUTTONDOWN && this->is_stop)
         {
-            if (msg.x >= 550 && msg.x <= 700)
+            if (msg.x >= 510 && msg.x <= 755 && msg.y >= 380 && msg.y <= 460)
+                this->is_stop = false;
+            if (msg.x >= 510 && msg.x <= 755 && msg.y >= 480 && msg.y <= 560)
             {
-                if (msg.y >= 300 && msg.y <= 350)
-                    is_stop = false;
-                if (msg.y >= 400 && msg.y <= 450)
-                {
-                    is_stop = false;    
-                    scene_manager->switch_to(SceneType::Game);
-                }
-                if (msg.y >= 500 && msg.y <= 550) // 返回菜单
-                {
-                    is_stop = false;
-                    scene_manager->switch_to(SceneType::Menu);
-                }
+                this->is_stop = false;
+                scene_manager->switch_to(SceneType::Game);
+            }
+            if (msg.x >= 510 && msg.x <= 755 && msg.y >= 580 && msg.y <= 660)
+            {
+                this->is_stop = false;
+                scene_manager->switch_to(SceneType::Menu);
             }
         }
     };
@@ -232,11 +207,9 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
-<<<<<<< HEAD
+
     bool is_stop = false;
-=======
     std::vector<GameObject *> game_object_loop;
-    bool is_stop = false;
 
     // 加载地图
     void load_map(char (*select_map)[22])
