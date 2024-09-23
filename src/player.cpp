@@ -39,7 +39,7 @@ Player::Player()
     collision_box = collision_manager->create_collision_box(position);
     collision_box->set_size({32, 32});
     collision_box->set_layer_src(CollisionLayer::Player);
-    collision_box->set_layer_dst({CollisionLayer::Wall, CollisionLayer::Enemy});
+    collision_box->set_layer_dst({CollisionLayer::Wall, CollisionLayer::Enemy, CollisionLayer::Prop_bullet, CollisionLayer::Prop_flashlight});
     collision_box->set_on_collide([&](CollisionBox *other_box)
                                   {
         if (other_box->get_layer_src() == CollisionLayer::Wall){
@@ -64,12 +64,15 @@ Player::Player()
         else if (other_box->get_layer_src() == CollisionLayer::Prop_flashlight)
         {
             this->has_flashlight = true;
+            other_box->set_enable(false);
+            other_box->set_position({-1000, -1000});
         }
         else if (other_box->get_layer_src() == CollisionLayer::Prop_bullet)
         {
-            bullet_count+=10;
-        }
-         });
+            this->bullet_count+=10;
+            other_box->set_enable(false);
+            other_box->set_position({-1000, -1000});
+        } });
 }
 Player::~Player()
 {
