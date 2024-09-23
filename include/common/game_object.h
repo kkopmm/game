@@ -5,6 +5,7 @@
 #include "vector2.h"
 #include "animation.h"
 #include "collision_box.h"
+#include "collision_manager.h"
 
 extern ResourcesManager *res_manager;
 extern CollisionManager *collision_manager;
@@ -22,6 +23,11 @@ public:
     };
     void on_update(float delta)
     {
+        if (collision_box)
+        {
+            position = collision_box->get_position();
+            animation.set_position(position);
+        }
         animation.on_update(delta);
     };
     void on_draw()

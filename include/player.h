@@ -29,6 +29,7 @@ private:
     bool can_attack = true;
     bool is_invulnerable = false;
     bool can_run = true;
+    bool has_flashlight = false;
 
     Timer timer_invulnerable;
 
@@ -64,5 +65,6 @@ public:
     void attack();
     int get_bullet_count() const;
     void set_bullet_count(int bullet_count);
+    bool get_has_flashlight() const;
 };
 #endif // _PLAYER_H

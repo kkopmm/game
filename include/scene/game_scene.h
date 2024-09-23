@@ -17,6 +17,8 @@
 #include "wall.h"
 #include "floor.h"
 #include "enemy.h"
+#include "prop_flashlight.h"
+#include "prop_bullet.h"
 
 #include <vector>
 #include <string>
@@ -38,24 +40,26 @@ public:
     {
         camera->reset();
         player = new Player();
-        door = new Door({64 * 0, 64 * 20});
         player->set_position({100, 100});
-        for (int i = 0; i < 22; i++)
+        // 道具在这里添加
+        game_object_loop = {
+            new PropBullet({64 * 1, 64 * 3}),
+            new Flashlight({64 * 1, 64 * 3}),
+        };
+
+        // 随机选择地图
+        int level = rand() % 2;
+        if (level == 0)
         {
-            std::vector<GameObject *> m;
-            for (int j = 0; j < 22; j++)
-            {
-                if (map0[i][j] == '1')
-                {
-                    m.push_back(new Wall({j * 64.0f, i * 64.0f}));
-                }
-                else if (map0[i][j] == '0')
-                {
-                    m.push_back(new Floor({j * 64.0f, i * 64.0f}));
-                }
-            }
-            map.push_back(m);
+            load_map(this->map0);
+            door = new Door({64 * 20, 64 * 20});
         }
+        else if (level == 1)
+        {
+            load_map(this->map1);
+            door = new Door({64 * 20, 64 * 20});
+        }
+        // 随机生成怪物
         for (int i = 0; i < 10; i++)
         {
             enemy_loop.push_back(new Enemy({(float)(rand() % 1280), (float)(rand() % 720)}));
@@ -70,17 +74,22 @@ public:
                 delete w;
         for (auto &enemy : enemy_loop)
             delete enemy;
+        for (GameObject *game_object : game_object_loop)
+            delete game_object;
         map.clear();
         enemy_loop.clear();
+        game_object_loop.clear();
         delete door;
         delete player;
-        player = nullptr;
         stop_all_audio();
     };
     void on_update(float delta)
     {
         player->on_update(delta);
-        door->on_update(delta);
+        // door->on_update(delta);
+        for (GameObject *game_object : game_object_loop)
+            game_object->on_update(delta);
+
         for (auto &enemy : enemy_loop)
         {
             Vector2 pos1 = player->get_position();
@@ -129,7 +138,8 @@ public:
         
         for (auto &wall : map)
             for (auto &w : wall)
-                w->on_draw();
+                if (w)
+                    w->on_draw();
         bool surprise = false;
         for (auto &enemy : enemy_loop)
         {
@@ -140,6 +150,9 @@ public:
                 return;
             }
         }
+        for (GameObject *game_object : game_object_loop)
+            game_object->on_draw();
+
         player->on_draw();
         door->on_draw();
 
@@ -148,8 +161,12 @@ public:
         settextstyle(30, 0, _T("楷体"));
 
         Rect r;
+        // 绘制视野
         r = {0, 0, 1300, 720};
-        putimage_ex(res_manager->get_image("z0"), &r);
+        if(!player->get_has_flashlight())
+            putimage_ex(res_manager->get_image("z0"), &r);
+        else
+            putimage_ex(res_manager->get_image("z1"), &r);
         // 绘制爱心图标
         r = {0, 0, 64, 64};
         putimage_ex(res_manager->get_image("爱心"), &r);
@@ -158,7 +175,7 @@ public:
         r = {100, 0, 64, 64};
         putimage_ex(res_manager->get_image("弹药"), &r);
         outtextxy(180, 20, std::to_wstring(player->get_bullet_count()).c_str());
-
+        // 绘制能量条
         sp_progress_bar.on_draw();
         
     };
@@ -194,8 +211,31 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
+<<<<<<< HEAD
     bool is_stop = false;
+=======
+    std::vector<GameObject *> game_object_loop;
+>>>>>>> eada62a3dce4094f7725952c421d28b1edad5681
 
+    // 加载地图
+    void load_map(char (*select_map)[22])
+    {
+        for (int i = 0; i < 22; i++)
+        {
+            std::vector<GameObject *> m;
+            char *row_ptr = *(select_map + i);
+            for (int j = 0; j < 22; j++)
+            {
+                if (*(row_ptr + j) == '1')
+                    m.push_back(new Wall({j * 64.0f, i * 64.0f}));
+                else if (*(row_ptr + j) == '0')
+                    m.push_back(new Floor({j * 64.0f, i * 64.0f}));
+                else
+                    m.push_back(nullptr);
+            }
+            map.push_back(m);
+        }
+    }
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
         '1', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1',

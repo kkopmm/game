@@ -39,8 +39,6 @@ public:
         }else{
             putimage(0, 0, res_manager->get_image("逃脱失败"));
         }
-        rectangle(510, 500, 755, 590);
-        rectangle(510, 620, 755, 700);
     };
     void on_input(const ExMessage &msg) {
         if (msg.message == WM_LBUTTONDOWN) {

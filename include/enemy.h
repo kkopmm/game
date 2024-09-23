@@ -24,7 +24,7 @@ public:
         animation.add_frame(res_manager->get_image("enemy"), 1);
         animation.set_position(position);
 
-        timer.set_wait_time(0.3f);
+        timer.set_wait_time(0.5f);
         timer.set_one_shot(true);
         timer.set_on_timeout(
             [&]()
@@ -85,7 +85,6 @@ public:
         is_dead = true;
         collision_box->set_enable(false);
         set_position({-1000, -1000});
-        play_audio(L"尖叫声", false);
     }
     void set_velocity(const Vector2 &vel)
     {

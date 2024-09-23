@@ -39,26 +39,40 @@ Player::Player()
     collision_box = collision_manager->create_collision_box(position);
     collision_box->set_size({32, 32});
     collision_box->set_layer_src(CollisionLayer::Player);
-    collision_box->set_layer_dst({CollisionLayer::Wall, CollisionLayer::Enemy});
+    collision_box->set_layer_dst({CollisionLayer::Wall, CollisionLayer::Enemy, CollisionLayer::Prop_bullet, CollisionLayer::Prop_flashlight});
     collision_box->set_on_collide([&](CollisionBox *other_box)
                                   {
-                                    if (other_box->get_layer_src() == CollisionLayer::Wall)
-        {Vector2 pos1 = collision_box->get_position();
-        Vector2 pos2 = other_box->get_position();
-        Vector2 size1 = collision_box->get_size();
-        Vector2 size2 = other_box->get_size();
-        float overlap_x = (size1.x+size2.x)/2 - abs(pos1.x-pos2.x);
-        float overlap_y = (size1.y+size2.y)/2 - abs(pos1.y-pos2.y);
-        if(overlap_x>overlap_y) 
-            set_position({position.x, position.y-(pos1.y<pos2.y?overlap_y:-overlap_y)});
-        else
-            set_position({position.x-(pos1.x<pos2.x?overlap_x:-overlap_x), position.y});}
-        if(other_box->get_layer_src() == CollisionLayer::Enemy&&!is_invulnerable)
-            {hp--;
-            std::cout << "is_invulnerable: " << is_invulnerable << std::endl;
+        if (other_box->get_layer_src() == CollisionLayer::Wall){
+            Vector2 pos1 = collision_box->get_position();
+            Vector2 pos2 = other_box->get_position();
+            Vector2 size1 = collision_box->get_size();
+            Vector2 size2 = other_box->get_size();
+            float overlap_x = (size1.x+size2.x)/2 - abs(pos1.x-pos2.x);
+            float overlap_y = (size1.y+size2.y)/2 - abs(pos1.y-pos2.y);
+            if(overlap_x>overlap_y) 
+                set_position({position.x, position.y-(pos1.y<pos2.y?overlap_y:-overlap_y)});
+            else
+                set_position({position.x-(pos1.x<pos2.x?overlap_x:-overlap_x), position.y});
+        }
+        else if (other_box->get_layer_src() == CollisionLayer::Enemy&&!is_invulnerable)
+        {
+            hp--;
             is_invulnerable = true;
             timer_invulnerable.restart();
-            } });
+            play_audio(L"尖叫声", false);
+        }
+        else if (other_box->get_layer_src() == CollisionLayer::Prop_flashlight)
+        {
+            this->has_flashlight = true;
+            other_box->set_enable(false);
+            other_box->set_position({-1000, -1000});
+        }
+        else if (other_box->get_layer_src() == CollisionLayer::Prop_bullet)
+        {
+            this->bullet_count+=10;
+            other_box->set_enable(false);
+            other_box->set_position({-1000, -1000});
+        } });
 }
 Player::~Player()
 {
@@ -113,6 +127,10 @@ int Player::get_bullet_count() const
 void Player::set_bullet_count(int bullet_count)
 {
     this->bullet_count = bullet_count;
+}
+bool Player::get_has_flashlight() const
+{
+    return has_flashlight;
 }
 float Player::get_speed() const
 {

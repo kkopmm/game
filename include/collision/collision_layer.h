@@ -7,7 +7,8 @@ enum class CollisionLayer
     Player,
     Enemy,
     Bullet,
-    Prop,
+    Prop_flashlight,
+    Prop_bullet,
     Wall,
     Door,
 };
