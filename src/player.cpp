@@ -121,7 +121,7 @@ float Player::get_speed() const
 void Player::on_input(const ExMessage &msg)
 {
     if (msg.message == WM_KEYDOWN)
-    {
+    {       
         if (msg.vkcode == 0x52)
             is_running = true;
         if (msg.vkcode == VK_SPACE)
@@ -220,4 +220,5 @@ void Player::on_draw()
 {
     current_animation->on_render();
     bullet->on_draw();
+    
 };
