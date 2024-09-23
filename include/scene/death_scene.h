@@ -5,6 +5,7 @@
 #include "scene_manager.h"
 #include "resources_manager.h"
 #include "timer.h"
+#include "util.h"
 
 extern SceneManager *scene_manager;
 extern ResourcesManager *res_manager;
