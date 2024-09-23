@@ -86,7 +86,7 @@ public:
     void on_update(float delta)
     {
         player->on_update(delta);
-        // door->on_update(delta);
+        door->on_update(delta);
         for (GameObject *game_object : game_object_loop)
             game_object->on_update(delta);
 
