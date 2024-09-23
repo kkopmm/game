@@ -17,6 +17,7 @@
 #include "wall.h"
 #include "floor.h"
 #include "enemy.h"
+#include "flashlight.h"
 
 #include <vector>
 #include <string>
@@ -39,19 +40,26 @@ public:
         player = new Player();
         door = new Door({64 * 0, 64 * 20});
         player->set_position({100, 100});
+        // 随机选择地图
+        int level = rand() % 2;
+        char(*select_map)[22];
+        if (level == 0)
+            select_map = map0;
+        else if (level == 1)
+            select_map = map1;
+        // 加载地图
         for (int i = 0; i < 22; i++)
         {
             std::vector<GameObject *> m;
+            char *row_ptr = *(select_map + i);
             for (int j = 0; j < 22; j++)
             {
-                if (map0[i][j] == '1')
-                {
+                if (*(row_ptr + j) == '1')
                     m.push_back(new Wall({j * 64.0f, i * 64.0f}));
-                }
-                else if (map0[i][j] == '0')
-                {
+                else if (*(row_ptr + j) == '0')
                     m.push_back(new Floor({j * 64.0f, i * 64.0f}));
-                }
+                else
+                    m.push_back(nullptr);
             }
             map.push_back(m);
         }
@@ -104,7 +112,8 @@ public:
     {
         for (auto &wall : map)
             for (auto &w : wall)
-                w->on_draw();
+                if (w)
+                    w->on_draw();
         bool surprise = false;
         for (auto &enemy : enemy_loop)
         {
@@ -117,14 +126,16 @@ public:
         }
         player->on_draw();
         door->on_draw();
+        flashlight.on_draw();
 
         setbkmode(TRANSPARENT);
         settextcolor(WHITE);
         settextstyle(30, 0, _T("楷体"));
 
         Rect r;
+        // 绘制视野
         r = {0, 0, 1300, 720};
-        putimage_ex(res_manager->get_image("z0"), &r);
+        // putimage_ex(res_manager->get_image("z0"), &r);
         // 绘制爱心图标
         r = {0, 0, 64, 64};
         putimage_ex(res_manager->get_image("爱心"), &r);
@@ -133,7 +144,7 @@ public:
         r = {100, 0, 64, 64};
         putimage_ex(res_manager->get_image("弹药"), &r);
         outtextxy(180, 20, std::to_wstring(player->get_bullet_count()).c_str());
-
+        // 绘制能量条
         sp_progress_bar.on_draw();
     };
     void on_input(const ExMessage &msg)
@@ -147,6 +158,7 @@ private:
     std::vector<Enemy *> enemy_loop;
     ProgressBar sp_progress_bar = ProgressBar(10, 80, 150, 15);
     Door *door = nullptr;
+    Flashlight flashlight = Flashlight({64 * 2, 64 * 1});
 
     char map0[22][22] = {
         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',

@@ -41,6 +41,7 @@ static const std::vector<ImageInfo> image_info_list = {
     {"大门", _T("res/img/大门.png")},
     {"z0", _T("res/img/z0.png")},
     {"惊吓", _T("res/img/惊吓.jpg")},
+    {"手电筒", _T("res/img/手电筒.png")},
 };
 
 static const std::vector<AtlasInfo> atlas_info_list = {

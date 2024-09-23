@@ -23,7 +23,6 @@ public:
 
         animation.add_frame(res_manager->get_image("大门"), 1);
         animation.set_position(position);
-
         collision_box = collision_manager->create_collision_box();
         collision_box->set_size({64, 64});
         collision_box->set_position(position);

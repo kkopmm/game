@@ -22,7 +22,6 @@ public:
     void on_update(float delta) {};
     void on_draw()
     {
-        
         int x = 550;
         int y = 300;
         int w = 150;

@@ -5,6 +5,7 @@
 #include "vector2.h"
 #include "animation.h"
 #include "collision_box.h"
+#include "collision_manager.h"
 
 extern ResourcesManager *res_manager;
 extern CollisionManager *collision_manager;
